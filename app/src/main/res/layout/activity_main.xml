@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/back"
+    tools:context=".MainActivity">
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+</ScrollView>
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        tools:ignore="MissingConstraints">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/imageProfile"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="3"
+            android:background="@drawable/icon_back"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+
+        <TextView
+            android:id="@+id/textName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="200"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="7dp"
+            android:layout_marginEnd="7dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:textColor="@color/white" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageSignOut"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginTop="8dp"            android:background="@drawable/icon_back"
+            android:padding="10dp"
+            android:layout_weight="3"
+            android:scaleType="centerCrop"
+            android:src="@drawable/round_power_settings_new_24"
+            android:tint="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:riv_corner_radius="6dp" />
+
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/back_connect_bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linear"
+        app:layout_constraintVertical_bias="0.848"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/conversationRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            android:overScrollMode="never"
+            android:padding="20dp"
+            android:visibility="gone"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+
+            />
+
+        <ProgressBar
+            android:id="@+id/progsesBar_M"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"/>
+
+
+    </FrameLayout>
+
+    <ImageButton
+        android:id="@+id/addButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="40dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="20dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/round_add"
+        android:backgroundTint="@color/primary"
+        android:background="@drawable/chat_input"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

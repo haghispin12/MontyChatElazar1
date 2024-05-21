@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "401058285436",
+    "project_id": "monty-chat-9bf8e",
+    "storage_bucket": "monty-chat-9bf8e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:401058285436:android:eaf7ef06cfcced721f46f9",
+        "android_client_info": {
+          "package_name": "com.example.montychat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKFQCArqe7Y6cnTaEKmlqTmcV9szEiiA8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

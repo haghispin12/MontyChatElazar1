@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="left"
+    android:orientation="horizontal"
+    android:padding="2dp">
+
+    <LinearLayout
+        android:id="@+id/layout_sent_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints"
+        android:background="@drawable/back_sent_message"
+        android:padding="3dp"
+        app:layout_constraintWidth_max="250dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/Sent_Message_Image"
+            android:layout_width="270dp"
+            android:layout_height="330dp"
+            android:scaleType="centerCrop"
+            android:background="@drawable/back_image_message"
+            android:padding="0dp"
+            android:src="@drawable/back_image_message"
+            tools:ignore="MissingConstraints,Suspicious0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/textMessage_S_I"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="12dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="8dp"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:visibility="gone"
+            app:layout_constraintWidth_max="270dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.8"
+            tools:ignore="Suspicious0dp" />
+
+        <TextView
+            android:id="@+id/textDateTime_S_I"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:textColor="@color/color3"
+            android:textSize="8sp"
+            android:visibility="gone"
+            tools:ignore="MissingConstraints,NotSibling" />
+
+    </LinearLayout>
+
+
+
+
+
+</LinearLayout>
