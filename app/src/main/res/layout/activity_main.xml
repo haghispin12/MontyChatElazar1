@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/__5_"
+    android:background="@drawable/deep_blue_iphone_14_plus_wallpaper"
     tools:context=".MainActivity">
 
 <ScrollView
@@ -46,7 +46,7 @@
             android:maxLines="1"
             android:textStyle="bold"
             android:textSize="30sp"
-            android:textColor="@color/white" />
+            android:textColor="@color/icon_back" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageSignOut"
