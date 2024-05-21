@@ -98,7 +98,7 @@ public class chat_with_user extends AppCompatActivity  {
         setListeners();
         loadReceiverDetails();
         init();
-        eventListener = vm.buildEventListener(chatMessages,chatAdapter,adapter,progsesBar_Chat,preferenceManager.getString(Constants.KEY_USER_ID),receiverUser.id,preferenceManager,receiverUser);
+        eventListener = vm.buildEventListener(chatMessages,chatAdapter,adapter,progsesBar_Chat,preferenceManager.getString(Constants.KEY_USER_ID),receiverUser,conversionId);
 
         vm.listenMessages(preferenceManager.getString(Constants.KEY_USER_ID),receiverUser.id,eventListener);
 

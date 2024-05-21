@@ -98,8 +98,9 @@ public class chat_with_user_View_Model extends ViewModel {
                 .addSnapshotListener(eventListener);
     }
 
-    public EventListener<QuerySnapshot> buildEventListener (List<chatMessage> chatMessages, chatAdapter chatAdapter, androidx.recyclerview.widget.RecyclerView adapter, ProgressBar progsesBar_Chat,String senderId, String receiverId , PreferenceManager preferenceManager,User receiverUser){
+    public EventListener<QuerySnapshot> buildEventListener (List<chatMessage> chatMessages, chatAdapter chatAdapter, androidx.recyclerview.widget.RecyclerView adapter, ProgressBar progsesBar_Chat,String senderId,User receiverUser,String conversionId2){
 
+        conversionId = conversionId2;
          final EventListener<QuerySnapshot> eventListener = (value, error)->{
             if(error != null){
                 return;
@@ -128,47 +129,23 @@ public class chat_with_user_View_Model extends ViewModel {
             }
             progsesBar_Chat.setVisibility(View.GONE);
             if(conversionId == null){
-                checkForConversion(chatMessages, preferenceManager,receiverUser);
+                checkForConversion(chatMessages,receiverUser,senderId);
             }
         };
         return eventListener;
     }
 
 
-
-
-
-//    private final EventListener<QuerySnapshot> eventListener = (value, error) -> {
-//        if (error != null) {
-//            errorMessageLiveData.setValue(error.getMessage());
-//            return;
-//        }
-//        if (value != null) {
-//            List<chatMessage> chatMessages = new ArrayList<>();
-//            for (DocumentSnapshot document : value.getDocuments()) {
-//                chatMessage chatMessage = new chatMessage();
-//                chatMessage.senderId = document.getString(Constants.KEY_SENDER_ID);
-//                chatMessage.receiverId = document.getString(Constants.KEY_RECEIVER_ID);
-//                chatMessage.message = document.getString(Constants.KEY_MESSAGE);
-//                chatMessage.dateTime = getReadableDateTime(document.getDate(Constants.KEY_TIMESTAMP));
-//                chatMessage.dateObject = document.getDate(Constants.KEY_TIMESTAMP);
-//                chatMessage.ImageMessageChat = document.getString(Constants.KEY_IMAGE_MESSAGE);
-//                chatMessages.add(chatMessage);
-//            }
-//            chatMessages.sort((obj1, obj2) -> obj1.dateObject.compareTo(obj2.dateObject));
-//            chatMessagesLiveData.setValue(chatMessages);
-//        }
-//    };
-
-    private void checkForConversion (List<chatMessage> chatMessages,PreferenceManager preferenceManager,User receiverUser) {
-        if(chatMessages.size() != 0){
-            checkForConversionRemotely(
-                    preferenceManager.getString(Constants.KEY_USER_ID),
-                    receiverUser.id
+    private void checkForConversion (List<chatMessage> chatMessages,User receiverUser,String senderId) {
+                if(chatMessages.size() != 0){
+                    checkForConversionRemotely(
+                            senderId,
+                            receiverUser.id
             );
+
             checkForConversionRemotely(
                     receiverUser.id,
-                    preferenceManager.getString(Constants.KEY_USER_ID)
+                    senderId
             );
         }
     }
