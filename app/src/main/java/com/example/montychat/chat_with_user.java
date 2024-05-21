@@ -23,6 +23,7 @@ import com.example.montychat.models.chatMessage;
 import com.example.montychat.utilities.Constants;
 import com.example.montychat.utilities.PreferenceManager;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -30,6 +31,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -66,7 +68,7 @@ public class chat_with_user extends AppCompatActivity  {
     //up to her designs variable
 
     chat_with_user_View_Model vm;
-    private  EventListener<QuerySnapshot> eventListener;
+   // private  EventListener<QuerySnapshot> eventListener;
 
 
 
@@ -98,7 +100,7 @@ public class chat_with_user extends AppCompatActivity  {
         setListeners();
         loadReceiverDetails();
         init();
-        eventListener = vm.buildEventListener(chatMessages,chatAdapter,adapter,progsesBar_Chat,preferenceManager.getString(Constants.KEY_USER_ID),receiverUser,conversionId);
+        //eventListener = vm.buildEventListener(chatMessages,chatAdapter,adapter,progsesBar_Chat,preferenceManager.getString(Constants.KEY_USER_ID),receiverUser,conversionId);
 
         vm.listenMessages(preferenceManager.getString(Constants.KEY_USER_ID),receiverUser.id,eventListener);
 
@@ -118,37 +120,37 @@ public class chat_with_user extends AppCompatActivity  {
 
 
 
-//    private final EventListener<QuerySnapshot> eventListener = (value, error)->{
-//        if(error != null){
-//            return;
-//        }
-//        if(value != null){
-//            for (DocumentChange documentChange : value.getDocumentChanges()){
-//                if(documentChange.getType() == DocumentChange.Type.ADDED){
-//                    chatMessage chatMessage = new chatMessage();
-//                    chatMessage.senderId = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
-//                    chatMessage.receiverId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
-//                    chatMessage.message = documentChange.getDocument().getString(Constants.KEY_MESSAGE);
-//                    chatMessage.dateTime = getReadableDateTime(documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP));
-//                    chatMessage.dateObject = documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
-//                    chatMessage.ImageMessageChat = documentChange.getDocument().getString(Constants.KEY_IMAGE_MESSAGE);
-//                    chatMessages.add(chatMessage);
-//                }
-//            }
-//            Collections.sort(chatMessages, (obj1, obj2) -> obj1.dateObject.compareTo(obj2.dateObject));
-//            if(chatAdapter.getItemCount() == 0){
-//                chatAdapter.notifyDataSetChanged();
-//            } else {
-//                chatAdapter.notifyItemRangeInserted(chatMessages.size(), chatMessages.size());
-//                adapter.smoothScrollToPosition(chatMessages.size());
-//            }
-//            adapter.setVisibility(View.VISIBLE);
-//        }
-//        progsesBar_Chat.setVisibility(View.GONE);
-//        if(conversionId == null){
-//            checkForConversion();
-//        }
-//    };
+    private final EventListener<QuerySnapshot> eventListener = (value, error)->{
+        if(error != null){
+            return;
+        }
+        if(value != null){
+            for (DocumentChange documentChange : value.getDocumentChanges()){
+                if(documentChange.getType() == DocumentChange.Type.ADDED){
+                    chatMessage chatMessage = new chatMessage();
+                    chatMessage.senderId = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
+                    chatMessage.receiverId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
+                    chatMessage.message = documentChange.getDocument().getString(Constants.KEY_MESSAGE);
+                    chatMessage.dateTime = getReadableDateTime(documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP));
+                    chatMessage.dateObject = documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
+                    chatMessage.ImageMessageChat = documentChange.getDocument().getString(Constants.KEY_IMAGE_MESSAGE);
+                    chatMessages.add(chatMessage);
+                }
+            }
+            Collections.sort(chatMessages, (obj1, obj2) -> obj1.dateObject.compareTo(obj2.dateObject));
+            if(chatAdapter.getItemCount() == 0){
+                chatAdapter.notifyDataSetChanged();
+            } else {
+                chatAdapter.notifyItemRangeInserted(chatMessages.size(), chatMessages.size());
+                adapter.smoothScrollToPosition(chatMessages.size());
+            }
+            adapter.setVisibility(View.VISIBLE);
+        }
+        progsesBar_Chat.setVisibility(View.GONE);
+        if(conversionId == null){
+            checkForConversion();
+        }
+    };
 
 
     private void loadReceiverDetails(){
