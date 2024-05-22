@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".log_In"
     android:animateLayoutChanges="true"
-    android:background="@color/back">
+    android:background="@drawable/__3_">
 
 <LinearLayout
     android:layout_width="match_parent"
@@ -38,7 +38,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:gravity="bottom"
-            android:layout_marginTop="300dp"
+            android:layout_marginTop="270dp"
             android:orientation="vertical">
 
 
