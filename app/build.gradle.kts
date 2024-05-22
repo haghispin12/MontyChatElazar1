@@ -60,8 +60,7 @@ dependencies {
 
     implementation ("com.squareup.picasso:picasso:2.71828")
 
-    implementation ("androidx.emoji2:emoji2:1.4.0")
-    implementation("androidx.emoji2:emoji2-bundled:1.4.0")
+
 
 
 
