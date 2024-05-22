@@ -40,35 +40,28 @@ public class chatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         userId = new PreferenceManager(context).getString(Constants.KEY_USER_ID);
     }
 
+
     @Override
     public int getItemViewType(int position) {
         chatMessage message = conversion.get(position);
-        Log.d(TAG, "getItemViewType - position: " + position + ", senderId: " + message.senderId + ", receiverId: " + message.receiverId + ", message: " + message.message);
 
-        if (message.senderId.equals(userId) && message.message.equals("❤️")) {
-            Log.d(TAG, "Returning view type 5 for sender heart emoji");
-            return 5;
-        } else if (message.receiverId.equals(userId) && message.message.equals("❤️")) {
-            Log.d(TAG, "Returning view type 6 for receiver heart emoji");
+        if (message.senderId.equals(userId) && message.message.equals("❤️") || message.message.equals("✌️") && message.senderId.equals(userId) ) {
+                return 5;
+        } else if (message.receiverId.equals(userId) && message.message.equals("❤️") || message.message.equals("✌️") && message.receiverId.equals(userId)) {
             return 6;
         } else if (message.senderId.equals(userId)) {
             if (message.ImageMessageChat != null) {
-                Log.d(TAG, "Returning view type 3 for sender image message");
                 return 3; // Assuming 3 is for sender image message
             } else {
-                Log.d(TAG, "Returning view type 1 for sender text message");
                 return 1;
             }
         } else if (message.receiverId.equals(userId)) {
             if (message.ImageMessageChat != null) {
-                Log.d(TAG, "Returning view type 4 for receiver image message");
                 return 4; // Assuming 4 is for receiver image message
             } else {
-                Log.d(TAG, "Returning view type 2 for receiver text message");
                 return 2;
             }
         } else {
-            Log.e(TAG, "Unknown message type at position " + position);
             return -1; // Error case, should not happen
         }
     }

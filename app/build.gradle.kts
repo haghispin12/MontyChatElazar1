@@ -5,12 +5,13 @@ plugins {
 
 android {
     namespace = "com.example.montychat"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.montychat"
         minSdk = 24
-        targetSdk = 33
+        //noinspection EditedTargetSdkVersion
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
         multiDexEnabled = true
@@ -35,7 +36,7 @@ android {
 
 dependencies {
 
-    //noinspection GradleCompatible,GradleCompatible
+    //noinspection GradleCompatible,GradleCompatible,GradleCompatible,GradleCompatible
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
@@ -58,6 +59,11 @@ dependencies {
     implementation ("androidx.multidex:multidex:2.0.1")
 
     implementation ("com.squareup.picasso:picasso:2.71828")
+
+    implementation ("androidx.emoji2:emoji2:1.4.0")
+    implementation("androidx.emoji2:emoji2-bundled:1.4.0")
+
+
 
 
 
