@@ -1,27 +1,25 @@
 package com.example.montychat.adapters;
 
+import static androidx.constraintlayout.widget.ConstraintLayoutStates.TAG;
+
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.montychat.R;
 import com.example.montychat.models.chatMessage;
-import com.example.montychat.showImage;
 import com.example.montychat.utilities.Constants;
 import com.example.montychat.utilities.PreferenceManager;
 
-import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 public class chatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -45,34 +43,56 @@ public class chatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemViewType(int position) {
         chatMessage message = conversion.get(position);
-        if (message.senderId.equals(userId)) {
-            return message.ImageMessageChat != null ? SENDER_IMAGE_TYPE : SENDER_VIEW_TYPE;
+        Log.d(TAG, "getItemViewType - position: " + position + ", senderId: " + message.senderId + ", receiverId: " + message.receiverId + ", message: " + message.message);
+
+        if (message.senderId.equals(userId) && message.message.equals("❤️")) {
+            Log.d(TAG, "Returning view type 5 for sender heart emoji");
+            return 5;
+        } else if (message.receiverId.equals(userId) && message.message.equals("❤️")) {
+            Log.d(TAG, "Returning view type 6 for receiver heart emoji");
+            return 6;
+        } else if (message.senderId.equals(userId)) {
+            if (message.ImageMessageChat != null) {
+                Log.d(TAG, "Returning view type 3 for sender image message");
+                return 3; // Assuming 3 is for sender image message
+            } else {
+                Log.d(TAG, "Returning view type 1 for sender text message");
+                return 1;
+            }
+        } else if (message.receiverId.equals(userId)) {
+            if (message.ImageMessageChat != null) {
+                Log.d(TAG, "Returning view type 4 for receiver image message");
+                return 4; // Assuming 4 is for receiver image message
+            } else {
+                Log.d(TAG, "Returning view type 2 for receiver text message");
+                return 2;
+            }
         } else {
-            return message.ImageMessageChat != null ? RECEIVER_IMAGE_TYPE : RECEIVER_VIEW_TYPE;
+            Log.e(TAG, "Unknown message type at position " + position);
+            return -1; // Error case, should not happen
         }
     }
 
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view;
-        LayoutInflater inflater = LayoutInflater.from(context);
-
-        if (viewType == SENDER_VIEW_TYPE) {
-            view = inflater.inflate(R.layout.item_container_sent_message, parent, false);
+        Log.d(TAG, "onCreateViewHolder - viewType: " + viewType);
+        if (viewType == 1) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_container_sent_message, parent, false);
             return new SenderMessageViewHolder(view);
-        } else if (viewType == RECEIVER_VIEW_TYPE) {
-            view = inflater.inflate(R.layout.item_container_received_message, parent, false);
+        } else if (viewType == 2) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_container_received_message, parent, false);
             return new ReceiverMessageViewHolder(view);
-        } else if (viewType == SENDER_IMAGE_TYPE) {
-            view = inflater.inflate(R.layout.item_container_sent_image, parent, false);
-            return new SenderImageViewHolder(view);
-        } else if (viewType == RECEIVER_IMAGE_TYPE) {
-            view = inflater.inflate(R.layout.item_container_receiv_image, parent, false);
-            return new ReceiverImageViewHolder(view);
+        }else if (viewType == 5) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.container_heart_emoji_sender, parent, false);
+            return new Sender_Emoji_Heart(view);
+        } else if (viewType == 6) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.container_heart_emoji_reciever, parent, false);
+            return new Reciever_Emoji_Heart(view);
+        } else {
+            Log.e(TAG, "Invalid view type: " + viewType);
+            throw new IllegalArgumentException("Invalid view type");
         }
-
-        // Return a default ViewHolder or handle other view types if needed
-        throw new IllegalArgumentException("Unknown viewType: " + viewType);
     }
 
 
@@ -100,28 +120,18 @@ public class chatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 receiverMessageViewHolder.messageText.setText(message.message);
                 receiverMessageViewHolder.messageText.setVisibility(View.VISIBLE);
             }
-        }else if(holder instanceof SenderImageViewHolder){
-            SenderImageViewHolder senderImageViewHolder = (SenderImageViewHolder) holder;
-            senderImageViewHolder.dateTimeText.setText(message.dateTime);
-            senderImageViewHolder.dateTimeText.setVisibility(View.VISIBLE);
-            senderImageViewHolder.ImageMessage.setImageBitmap(getUserImage(message.ImageMessageChat));
-            senderImageViewHolder.ImageMessage.setVisibility(View.VISIBLE);
-
-            if(senderImageViewHolder.messageText != null ){
-                senderImageViewHolder.messageText.setText(message.message);
-                senderImageViewHolder.messageText.setVisibility(View.VISIBLE);
-            }
-        }else if(holder instanceof ReceiverImageViewHolder){
-            ReceiverImageViewHolder receiverImageViewHolder = (ReceiverImageViewHolder) holder;
-            receiverImageViewHolder.dateTimeText.setText(message.dateTime);
-            receiverImageViewHolder.dateTimeText.setVisibility(View.VISIBLE);
-            receiverImageViewHolder.ImageMessage.setImageBitmap(getUserImage(message.ImageMessageChat));
-            receiverImageViewHolder.ImageMessage.setVisibility(View.VISIBLE);
-
-            if(receiverImageViewHolder.messageText != null ){
-                receiverImageViewHolder.messageText.setText(message.message);
-                receiverImageViewHolder.messageText.setVisibility(View.VISIBLE);
-            }
+        } else if (holder instanceof  Sender_Emoji_Heart){
+            Sender_Emoji_Heart senderEmojiHeart = (Sender_Emoji_Heart) holder;
+            senderEmojiHeart.dateTimeText.setText(message.dateTime);
+            senderEmojiHeart.dateTimeText.setVisibility(View.VISIBLE);
+            senderEmojiHeart.messageText.setText(message.message);
+            senderEmojiHeart.messageText.setVisibility(View.VISIBLE);
+        } else if (holder instanceof  Reciever_Emoji_Heart){
+            Reciever_Emoji_Heart recieverEmojiHeart = (Reciever_Emoji_Heart) holder;
+            recieverEmojiHeart.dateTimeText.setText(message.dateTime);
+            recieverEmojiHeart.dateTimeText.setVisibility(View.VISIBLE);
+            recieverEmojiHeart.messageText.setText(message.message);
+            recieverEmojiHeart.messageText.setVisibility(View.VISIBLE);
         }
     }
 
@@ -145,42 +155,16 @@ public class chatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             super(itemView);
             messageText = itemView.findViewById(R.id.textMessage_S);
             dateTimeText = itemView.findViewById(R.id.textDateTime_S);
-        }
-    }
-    public class SenderImageViewHolder extends RecyclerView.ViewHolder {
-        TextView messageText;
-        TextView dateTimeText;
-        ImageView ImageMessage;
 
-        public SenderImageViewHolder(View itemView) {
-            super(itemView);
-            ImageMessage = itemView.findViewById(R.id.Sent_Message_Image);
-            messageText = itemView.findViewById(R.id.textMessage_S_I);
-            dateTimeText = itemView.findViewById(R.id.textDateTime_S_I);
-
-                ImageMessage.setOnClickListener(view -> {
-                    if(ImageMessage != null && ImageMessage.getVisibility() == View.VISIBLE) {
-                        Bitmap bitmap = ((BitmapDrawable) ImageMessage.getDrawable()).getBitmap();
-                        Intent intent = new Intent(context, showImage.class);
-                        intent.putExtra(Constants.KEY_IMAGE_MESSAGE,bitmapToString(bitmap));
-                        context.startActivity(intent);
-                    }
-                });
-            }
+            String hert = "elazar";
 
 
         }
-    private void showToast (String s) {
-        Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
-    }
-    public String bitmapToString(Bitmap bitmap) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream.toByteArray();
-        String encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
-        return encodedImage;
-    }
+        public void setSize (int num){
+            messageText.setTextSize(num);
+        }
 
+    }
 
     public class ReceiverMessageViewHolder extends RecyclerView.ViewHolder {
         TextView messageText;
@@ -192,31 +176,38 @@ public class chatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             messageText = itemView.findViewById(R.id.textMessage_R);
             dateTimeText = itemView.findViewById(R.id.textDateTime_R);
 
+
+        }
+
+        public void setSize (int num){
+            messageText.setTextSize(num);
         }
     }
-    public class ReceiverImageViewHolder extends RecyclerView.ViewHolder {
+    public class Reciever_Emoji_Heart extends RecyclerView.ViewHolder{
+
+
         TextView messageText;
         TextView dateTimeText;
-        ImageView ImageMessage;
 
-
-        public ReceiverImageViewHolder(View itemView) {
+        public Reciever_Emoji_Heart(@NonNull View itemView) {
             super(itemView);
-            messageText = itemView.findViewById(R.id.textMessage_R_I);
-            dateTimeText = itemView.findViewById(R.id.textDateTime_R_I);
-            ImageMessage = itemView.findViewById(R.id.Receiver_Message_Image);
+            messageText = itemView.findViewById(R.id.textMessage_R_H);
+            dateTimeText = itemView.findViewById(R.id.textDateTime_R_H);
 
-            if (ImageMessage != null) {
-                ImageMessage.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Bitmap bitmap = ((BitmapDrawable) ImageMessage.getDrawable()).getBitmap();
-                        Intent intent = new Intent(context, showImage.class);
-                        intent.putExtra(Constants.KEY_IMAGE_MESSAGE, bitmapToString(bitmap));
-                        context.startActivity(intent);
-                    }
-                });
-            }
+        }
+    }
+
+    public class Sender_Emoji_Heart extends RecyclerView.ViewHolder{
+
+
+        TextView messageText;
+        TextView dateTimeText;
+
+        public Sender_Emoji_Heart(@NonNull View itemView) {
+            super(itemView);
+            messageText = itemView.findViewById(R.id.textMessage_S_H);
+            dateTimeText = itemView.findViewById(R.id.textDateTime_S_H);
+
         }
     }
 }
