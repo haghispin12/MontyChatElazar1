@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Sign_Up"
-    android:background="@drawable/__3_">
+    android:background="@drawable/__8_">
     >
 
     <LinearLayout
@@ -39,7 +39,6 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/back_connect_bottom"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/backButton"
             app:layout_constraintVertical_bias="0.848"
@@ -200,7 +199,7 @@
                         android:layout_marginBottom="20dp"
                         android:gravity="center"
                         android:text="Sign In"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 

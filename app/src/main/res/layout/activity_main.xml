@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/deep_blue_iphone_14_plus_wallpaper"
+    android:background="@drawable/__9_"
     tools:context=".MainActivity">
 
 <ScrollView
