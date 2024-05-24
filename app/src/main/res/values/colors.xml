@@ -2,8 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="primary">#BF683CFF</color>
-    <color name="primary_dark">#F3FF9800</color>
+    <color name="primary">#BFA78DFF</color>
+    <color name="primary_dark">#C6FDC0CA</color>
     <color name="primary_text">#191114</color>
     <color name="secondary_text">#605A5A</color>
     <color name="input_back">#A8ECECEC</color>
@@ -12,7 +12,7 @@
     <color name="eror">#FF4763</color>
     <color name="color">#5E5858</color>
     <color name="back">#597B97</color>
-    <color name="color2">#DAFF9800</color>
+    <color name="color2">#F0CD4F4B</color>
     <color name="color3">#8AABC5</color>
 
 
