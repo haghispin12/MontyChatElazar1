@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Sign_Up"
-    android:background="@drawable/__8_">
+    android:background="@drawable/__4_">
     >
 
     <LinearLayout
@@ -29,8 +29,9 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="30dp"
                 android:text="Create New Account"
-                android:textColor="@color/white"
+                android:textColor="@color/back"
                 android:textSize="30sp"
+                android:layout_marginBottom="10dp"
                 android:textStyle="bold" />
 
 
@@ -48,9 +49,10 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="650dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
+                android:background="@drawable/__6_"
                 android:orientation="vertical">
 
                 <FrameLayout
@@ -76,7 +78,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="Add Image"
-                        android:textColor="@color/secondary_text"
+                        android:textColor="@color/white"
                         android:textSize="20sp" />
 
                 </FrameLayout>
@@ -95,7 +97,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="10dp"
                         android:text="Enter details to continue"
-                        android:textColor="@color/primary_text"
+                        android:textColor="@color/back"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -111,7 +113,7 @@
                         android:paddingStart="16sp"
                         android:paddingEnd="16sp"
                         android:textColor="@color/primary_text"
-                        android:textColorHint="@color/black"
+                        android:textColorHint="@color/white"
                         android:textSize="13sp" />
 
                     <EditText
@@ -127,7 +129,7 @@
                         android:paddingStart="16sp"
                         android:paddingEnd="16sp"
                         android:textColor="@color/primary_text"
-                        android:textColorHint="@color/black"
+                        android:textColorHint="@color/white"
                         android:textSize="13sp" />
 
                     <EditText
@@ -143,7 +145,7 @@
                         android:paddingStart="16sp"
                         android:paddingEnd="16sp"
                         android:textColor="@color/primary_text"
-                        android:textColorHint="@color/black"
+                        android:textColorHint="@color/white"
                         android:textSize="13sp" />
 
                     <EditText
@@ -159,7 +161,7 @@
                         android:paddingStart="16sp"
                         android:paddingEnd="16sp"
                         android:textColor="@color/primary_text"
-                        android:textColorHint="@color/black"
+                        android:textColorHint="@color/white"
                         android:textSize="13sp" />
 
                     <FrameLayout
@@ -199,7 +201,7 @@
                         android:layout_marginBottom="20dp"
                         android:gravity="center"
                         android:text="Sign In"
-                        android:textColor="@color/eror"
+                        android:textColor="@color/back"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 

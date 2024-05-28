@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/__9_"
+    android:background="@drawable/__5_"
     tools:context=".MainActivity">
 
 <ScrollView
@@ -46,14 +46,14 @@
             android:maxLines="1"
             android:textStyle="bold"
             android:textSize="30sp"
-            android:textColor="@color/icon_back" />
+            android:textColor="@color/back" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageSignOut"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_marginEnd="12dp"
-            android:layout_marginTop="8dp"            android:background="@drawable/icon_back"
+            android:layout_marginTop="8dp"            android:background="@drawable/image_back"
             android:padding="10dp"
             android:layout_weight="3"
             android:scaleType="centerCrop"

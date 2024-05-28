@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="@drawable/__8_"
+    android:background="@drawable/__6_"
 
     tools:context=".chat_with_user">
 
@@ -24,7 +24,7 @@
     <View
         android:id="@+id/ViewPass"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:background="@color/white"
         android:foregroundGravity="top"
         tools:ignore="MissingConstraints"
@@ -39,7 +39,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="12dp"
         android:padding="4dp"
-        android:tint="@color/white"
+        android:tint="@color/black"
         android:src="@drawable/ic_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -54,7 +54,7 @@
         android:layout_marginRight="16dp"
         android:padding="2dp"
         android:src="@drawable/info"
-        android:tint="@color/white"
+        android:tint="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
@@ -69,7 +69,7 @@
         android:ellipsize="end"
         android:gravity="center"
         android:maxLines="1"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textStyle="bold"
         android:text=""
         android:textSize="20sp"
@@ -89,7 +89,6 @@
         android:visibility="gone"
         android:layout_marginTop="2dp"
         app:stackFromEnd="true"
-        android:layout_marginBottom="2dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="@id/view_back"
         app:layout_constraintTop_toBottomOf="@+id/image_back"
