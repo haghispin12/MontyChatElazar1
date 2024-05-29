@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="@drawable/__6_"
+    android:background="@drawable/__4_"
 
     tools:context=".chat_with_user">
 
@@ -39,7 +39,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="12dp"
         android:padding="4dp"
-        android:tint="@color/black"
+        android:tint="@color/white"
         android:src="@drawable/ic_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -54,7 +54,7 @@
         android:layout_marginRight="16dp"
         android:padding="2dp"
         android:src="@drawable/info"
-        android:tint="@color/black"
+        android:tint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
@@ -69,7 +69,7 @@
         android:ellipsize="end"
         android:gravity="center"
         android:maxLines="1"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textStyle="bold"
         android:text=""
         android:textSize="20sp"
@@ -113,6 +113,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/chat_input"
+        android:backgroundTint="@color/primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -140,6 +141,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/chat_input"
+        android:backgroundTint="@color/primary"
         android:hint="  type a message"
         android:imeOptions="actionDone"
         android:importantForAutofill="no"

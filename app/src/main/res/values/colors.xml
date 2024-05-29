@@ -2,13 +2,13 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="primary">#1DFFFFFF</color>
+    <color name="primary">#45FFFFFF</color>
     <color name="primary_dark">#C6BD364C</color>
     <color name="primary_text">#191114</color>
-    <color name="dark_clear">#B2000000</color>
+    <color name="dark_clear">#7C202020</color>
     <color name="secondary_text">#605A5A</color>
-    <color name="input_back">#B93C3C3C</color>
-    <color name="input_back2">#6DECECEC</color>
+    <color name="input_back">#B9F1F1F1</color>
+    <color name="input_back2">#51ECE8E8</color>
     <color name="icon_back">#B93C3C3C</color>
     <color name="eror">#FF4763</color>
     <color name="color">#5E5858</color>
