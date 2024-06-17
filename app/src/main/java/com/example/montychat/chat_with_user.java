@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,7 +58,6 @@ public class chat_with_user extends AppCompatActivity  {
     FrameLayout layoutSend;
     ProgressBar progsesBar_Chat;
     private String capturedImage;
-    ImageView imageView;
     View view_back;
     View ViewPass;
     Button btnGallery;
@@ -79,7 +77,7 @@ public class chat_with_user extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_with_user);
 
-        //assign each button to its activity
+        //assign each item to its activity
         textName = findViewById(R.id.textName_chat);
         imageBack = findViewById(R.id.image_back);
         adapter = findViewById(R.id.chatRecyclerView);
@@ -87,7 +85,6 @@ public class chat_with_user extends AppCompatActivity  {
         layoutSend = findViewById(R.id.layout_send);
         progsesBar_Chat = findViewById(R.id.progsesBar_Chat);
         CameraButton = findViewById(R.id.CameraButton);
-        //imageView = findViewById(R.id.ImageSend);
         infoButton = findViewById(R.id.image_info);
         view_back = findViewById(R.id.view_back);
         ViewPass = findViewById(R.id.ViewPass);
@@ -107,16 +104,12 @@ public class chat_with_user extends AppCompatActivity  {
     }
     private void init (){//function that prepare the activity to be used/.
 
-
-
         preferenceManager = new PreferenceManager(this);
         chatMessages = new ArrayList<>();
         chatAdapter = new chatAdapter((Context) this,chatMessages);
         adapter.setAdapter(chatAdapter);
         database = FirebaseFirestore.getInstance();
     }
-
-
 
 
 
@@ -138,6 +131,7 @@ public class chat_with_user extends AppCompatActivity  {
                 }
             }
             Collections.sort(chatMessages, (obj1, obj2) -> obj1.dateObject.compareTo(obj2.dateObject));
+
             if(chatAdapter.getItemCount() == 0){
                 chatAdapter.notifyDataSetChanged();
             } else {
@@ -158,17 +152,11 @@ public class chat_with_user extends AppCompatActivity  {
         textName.setText(receiverUser.name);
     }
     private void setListeners (){
-        imageBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                chat_with_user.this.onBackPressed();
-            }
-        });
+
         layoutSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 vm.sendMessage(inputMessage.getText().toString(),capturedImage,receiverUser,conversionId,preferenceManager);
-                capturedImage =null;
                 inputMessage.setText("");
             }
         });
@@ -209,4 +197,6 @@ public class chat_with_user extends AppCompatActivity  {
             conversionId =documentSnapshot.getId();
         }
     };
+
+
 }

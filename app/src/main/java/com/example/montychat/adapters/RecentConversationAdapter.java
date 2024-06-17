@@ -79,7 +79,9 @@ public class RecentConversationAdapter extends RecyclerView.Adapter<RecentConver
         public void bind(chatMessage conversation) {
             textName.setText(conversation.conversionName);
             textRecentMessage.setText(conversation.message);
-            imageProfile.setImageBitmap(getUserImage_R(conversation.conversionImage));
+            if(conversation.conversionImage != null){
+                imageProfile.setImageBitmap(getUserImage_R(conversation.conversionImage));
+            }
             // Format the date and time
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
             String formattedDate = sdf.format(conversation.dateObject);

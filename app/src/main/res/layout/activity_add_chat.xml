@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="@drawable/__5_"
+    android:background="@drawable/__4_"
     tools:context=".addChat">
 
     <ImageButton
@@ -14,6 +14,7 @@
         android:layout_height="45dp"
         android:layout_margin="9dp"
         android:background="@drawable/back_received_message"
+        android:backgroundTint="@color/input_back2"
         android:padding="10dp"
         android:layout_weight="3"
         android:scaleType="centerCrop"
@@ -27,6 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@drawable/back_connecy_to_buttom3"
+        android:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/backButton"
         android:layout_marginTop="10dp"
