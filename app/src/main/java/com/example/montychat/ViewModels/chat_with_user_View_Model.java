@@ -138,18 +138,6 @@ public class chat_with_user_View_Model extends ViewModel {
                                 Constants.KEY_SENDER_IMAGE, newImage);
                     }
                 });
-
-        database.collection(Constants.KEY_COLLECTION_CONVERSATIONS)
-                .whereEqualTo(Constants.KEY_RECEIVER_ID, userId)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
-                        DocumentReference documentReference = documentSnapshot.getReference();
-                        documentReference.update(Constants.KEY_RECEIVER_NAME, newName,
-                                Constants.KEY_RECEIVER_EMAIL, newEmail,
-                                Constants.KEY_RECEIVER_IMAGE, newImage);
-                    }
-                });
     }
 
 }

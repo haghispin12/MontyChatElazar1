@@ -41,7 +41,7 @@ public class Sign_Up extends AppCompatActivity {
     TextView sign_in;
 
     ProgressBar progressBar;
-    com.google.android.material.imageview.ShapeableImageView imageProfile;
+    com.makeramen.roundedimageview.RoundedImageView imageProfile;
     TextView textAddImage;
     FrameLayout frameLayout;
     private String encodedImage;
@@ -63,7 +63,7 @@ public class Sign_Up extends AppCompatActivity {
          sign_up = findViewById(R.id.Sidn_Up_Button);
          sign_in = findViewById(R.id.Sign_In_text);
          progressBar= findViewById(R.id.progresBar1);
-         imageProfile = findViewById(R.id.imageProfile);
+         imageProfile = findViewById(R.id.imageProfile_sign_up);
          textAddImage = findViewById(R.id.textAddImage);
          frameLayout = findViewById(R.id.layout_Image);
 
