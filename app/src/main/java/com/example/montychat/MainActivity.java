@@ -145,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
                         if (chatMessages.get(i).senderId.equals(senderId) && chatMessages.get(i).receiverId.equals(receiverId) ) {
                             chatMessages.get(i).message = documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE);
                             chatMessages.get(i).dateObject = documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
+                            //chatMessages.get(i).conversionName = documentChange.getDocument().getData(Constants.)
                             break;
                         }
                     }

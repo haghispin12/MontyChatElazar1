@@ -112,9 +112,6 @@ public class chat_with_user_View_Model extends ViewModel {
     private void updateConversion(String message, String conversionId,PreferenceManager preferenceManager) {
         DocumentReference documentReference = database.collection(Constants.KEY_COLLECTION_CONVERSATIONS).document(conversionId);
         documentReference.update(Constants.KEY_LAST_MESSAGE, message, Constants.KEY_TIMESTAMP, new Date());
-        documentReference.update(Constants.KEY_SENDER_NAME,preferenceManager.getString(Constants.KEY_NAME));
-        documentReference.update(Constants.KEY_SENDER_EMAIL,preferenceManager.getString(Constants.KEY_EMAIL));
-        documentReference.update(Constants.KEY_SENDER_IMAGE,preferenceManager.getString(Constants.KEY_IMAGE));
     }
 
     private String getReadableDateTime(Date date) {
@@ -136,6 +133,18 @@ public class chat_with_user_View_Model extends ViewModel {
                         documentReference.update(Constants.KEY_SENDER_NAME, newName,
                                 Constants.KEY_SENDER_EMAIL, newEmail,
                                 Constants.KEY_SENDER_IMAGE, newImage);
+                    }
+                });
+
+        database.collection(Constants.KEY_COLLECTION_CONVERSATIONS)
+                .whereEqualTo(Constants.KEY_RECEIVER_ID, userId)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+                        DocumentReference documentReference = documentSnapshot.getReference();
+                        documentReference.update(Constants.KEY_RECEIVER_NAME, newName,
+                                Constants.KEY_RECEIVER_EMAIL, newEmail,
+                                Constants.KEY_RECEIVER_IMAGE, newImage);
                     }
                 });
     }
