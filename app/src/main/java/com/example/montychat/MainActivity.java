@@ -122,10 +122,14 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
                         chatMessage.conversionImage = documentChange.getDocument().getString(Constants.KEY_RECEIVER_IMAGE);
                         chatMessage.conversionName = documentChange.getDocument().getString(Constants.KEY_RECEIVER_NAME);
                         chatMessage.conversionId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
+                        chatMessage.conversationEmail = documentChange.getDocument().getString(Constants.KEY_RECEIVER_EMAIL);
+
                     } else {
                         chatMessage.conversionImage = documentChange.getDocument().getString(Constants.KEY_SENDER_IMAGE);
                         chatMessage.conversionName = documentChange.getDocument().getString(Constants.KEY_SENDER_NAME);
                         chatMessage.conversionId = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
+                        chatMessage.conversationEmail = documentChange.getDocument().getString(Constants.KEY_SENDER_EMAIL);
+
                     }
 
                     chatMessage.message = documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE);
@@ -201,7 +205,17 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
                 startActivity(intent);
             }
         });
-
+        textName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, settings.class);
+                intent.putExtra(Constants.KEY_NAME, preferenceManager.getString(Constants.KEY_NAME));
+                intent.putExtra(Constants.KEY_EMAIL,preferenceManager.getString(Constants.KEY_EMAIL));
+                intent.putExtra(Constants.KEY_IMAGE,preferenceManager.getString(Constants.KEY_IMAGE));
+                startActivity(intent);
+                finish();
+            }
+        });
 
     }
 
@@ -210,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
         Intent chatIntent = new Intent(getApplicationContext(), chat_with_user.class);
         chatIntent.putExtra(Constants.KEY_USER, user);
         startActivity(chatIntent);
+        finish();
     }
 
 }

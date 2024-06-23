@@ -5,22 +5,21 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/montychat"
+        android:icon="@drawable/designer2"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/montychat"
+        android:roundIcon="@drawable/designer2"
         android:supportsRtl="true"
         android:theme="@style/Theme.MontyChat"
         tools:targetApi="31">
         <activity
-            android:name=".showImage"
+            android:name=".settings"
             android:exported="false" />
         <activity
-            android:name=".SentImageChat"
+            android:name=".showUser"
             android:exported="false" />
         <activity
             android:name=".chat_with_user"

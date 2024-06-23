@@ -23,6 +23,12 @@ public class Constants {
     public static final String KEY_RECEIVER_IMAGE ="receiverImage";
     public static final String KEY_LAST_MESSAGE ="lastMessage";
     public static final  String KEY_IMAGE_MESSAGE = "imageMessage";
+    public static final  String KEY_RECEIVER_EMAIL = "receiverEmail";
+    public static final  String KEY_SENDER_EMAIL = "senderEmail";
+    public static final String KEY_LAST_ID = "lastId";
+
+
+
 
 
 }

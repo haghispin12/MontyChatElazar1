@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/input_back2"
+    tools:context=".showUser">
+
+    <TextView
+        android:id="@+id/userNameInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="40sp"
+        android:text="user text"
+        android:gravity="center"
+        android:layout_margin="15dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"/>
+
+    <FrameLayout
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/imageProfile_I"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/image_back"
+            android:scaleType="centerCrop"
+            app:riv_oval="true"
+            />
+
+        <ImageView
+            android:id="@+id/tempererySrc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:src="@drawable/baseline_person_4_24"
+            android:padding="15dp"/>
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/userEmailInfo"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="user email"
+        android:textSize="30sp"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textStyle="italic"
+        android:layout_marginTop="5dp"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <Button
+            android:id="@+id/buttonInfo"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:backgroundTint="@color/back"
+            android:text="Back to chat"
+            android:gravity="center_vertical"
+            android:paddingStart="65dp"
+            android:textSize="30sp"/>
+
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:layout_marginRight="40dp"
+            android:padding="3dp"
+            android:src="@drawable/baseline_message_24"/>
+
+
+
+    </FrameLayout>
+
+
+
+
+
+
+</LinearLayout>

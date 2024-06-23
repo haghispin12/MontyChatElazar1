@@ -2,6 +2,7 @@ package com.example.montychat;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -158,6 +159,22 @@ public class chat_with_user extends AppCompatActivity  {
             public void onClick(View view) {
                 vm.sendMessage(inputMessage.getText().toString(),capturedImage,receiverUser,conversionId,preferenceManager);
                 inputMessage.setText("");
+            }
+        });
+        imageBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        infoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(chat_with_user.this,showUser.class);
+                intent.putExtra(Constants.KEY_USER,receiverUser);
+                startActivity(intent);
             }
         });
     }

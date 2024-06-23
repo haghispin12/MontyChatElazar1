@@ -113,7 +113,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/chat_input"
-        android:backgroundTint="@color/input_back2"
+        android:backgroundTint="@color/back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -142,7 +142,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/chat_input"
-        android:backgroundTint="@color/input_back2"
+        android:backgroundTint="@color/back"
         android:hint="  type a message"
         android:imeOptions="actionDone"
         android:importantForAutofill="no"

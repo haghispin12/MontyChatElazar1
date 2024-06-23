@@ -10,6 +10,7 @@ import com.example.montychat.models.chatMessage;
 import com.example.montychat.utilities.Constants;
 import com.example.montychat.utilities.PreferenceManager;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -46,7 +47,7 @@ public class chat_with_user_View_Model extends ViewModel {
             database.collection(Constants.KEY_COLLECTION_CHAT).add(message);
 
             if (conversionId != null) {
-                updateConversion(messageText, conversionId);
+                updateConversion(messageText, conversionId,preferenceManager);
             } else {
                 HashMap<String, Object> conversion = new HashMap<>();
                 conversion.put(Constants.KEY_SENDER_ID, preferenceManager.getString(Constants.KEY_USER_ID));
@@ -57,6 +58,8 @@ public class chat_with_user_View_Model extends ViewModel {
                 conversion.put(Constants.KEY_TIMESTAMP, new Date());
                 conversion.put(Constants.KEY_RECEIVER_IMAGE,receiverUser.image);
                 conversion.put(Constants.KEY_SENDER_IMAGE,preferenceManager.getString(Constants.KEY_IMAGE));
+                conversion.put(Constants.KEY_RECEIVER_EMAIL,receiverUser.email);
+                conversion.put(Constants.KEY_SENDER_EMAIL,preferenceManager.getString(Constants.KEY_EMAIL));
                 addConversion(conversion);
             }
         }
@@ -106,12 +109,47 @@ public class chat_with_user_View_Model extends ViewModel {
                 .addOnSuccessListener(documentReference -> conversionId = documentReference.getId());
     }
 
-    private void updateConversion(String message, String conversionId) {
+    private void updateConversion(String message, String conversionId,PreferenceManager preferenceManager) {
         DocumentReference documentReference = database.collection(Constants.KEY_COLLECTION_CONVERSATIONS).document(conversionId);
         documentReference.update(Constants.KEY_LAST_MESSAGE, message, Constants.KEY_TIMESTAMP, new Date());
+        documentReference.update(Constants.KEY_SENDER_NAME,preferenceManager.getString(Constants.KEY_NAME));
+        documentReference.update(Constants.KEY_SENDER_EMAIL,preferenceManager.getString(Constants.KEY_EMAIL));
+        documentReference.update(Constants.KEY_SENDER_IMAGE,preferenceManager.getString(Constants.KEY_IMAGE));
     }
 
     private String getReadableDateTime(Date date) {
         return new SimpleDateFormat("MMMM dd, yyyy - hh:mm a", Locale.getDefault()).format(date);
     }
+
+    public void updateAllConversationsWithNewDetails(PreferenceManager preferenceManager) {
+        String userId = preferenceManager.getString(Constants.KEY_USER_ID);
+        String newName = preferenceManager.getString(Constants.KEY_NAME);
+        String newEmail = preferenceManager.getString(Constants.KEY_EMAIL);
+        String newImage = preferenceManager.getString(Constants.KEY_IMAGE);
+
+        database.collection(Constants.KEY_COLLECTION_CONVERSATIONS)
+                .whereEqualTo(Constants.KEY_SENDER_ID, userId)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+                        DocumentReference documentReference = documentSnapshot.getReference();
+                        documentReference.update(Constants.KEY_SENDER_NAME, newName,
+                                Constants.KEY_SENDER_EMAIL, newEmail,
+                                Constants.KEY_SENDER_IMAGE, newImage);
+                    }
+                });
+
+        database.collection(Constants.KEY_COLLECTION_CONVERSATIONS)
+                .whereEqualTo(Constants.KEY_RECEIVER_ID, userId)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+                        DocumentReference documentReference = documentSnapshot.getReference();
+                        documentReference.update(Constants.KEY_RECEIVER_NAME, newName,
+                                Constants.KEY_RECEIVER_EMAIL, newEmail,
+                                Constants.KEY_RECEIVER_IMAGE, newImage);
+                    }
+                });
+    }
+
 }

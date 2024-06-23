@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/input_back2"
+    tools:context=".settings">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text = "settings"
+            android:textSize="55sp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_margin="10dp"/>
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/imageProfile_S"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/image_back"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:riv_oval="true"
+            android:layout_margin="5dp"
+            android:layout_gravity="center"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:text="name: "
+                android:textColor="@color/black"
+                android:textSize="27sp"
+                android:gravity="center"/>
+
+            <EditText
+                android:id="@+id/edit_user_name_s"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/icon_back"
+                android:hint="Edit your name "
+                android:padding="10dp"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:text="email: "
+                android:textColor="@color/black"
+                android:textSize="27sp"
+                android:gravity="center"/>
+
+            <EditText
+                android:id="@+id/edit_user_email_s"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/icon_back"
+                android:hint="Edit your email "
+                android:padding="10dp"/>
+
+
+        </LinearLayout>
+
+            <Button
+                android:id="@+id/button_up_date_s"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:layout_margin="40dp"
+                android:backgroundTint="@color/back"
+                android:text="Ud Date"
+                android:textSize="36sp"/>
+    </LinearLayout>
+
+</ScrollView>

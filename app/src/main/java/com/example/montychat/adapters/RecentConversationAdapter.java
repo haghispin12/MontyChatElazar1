@@ -16,6 +16,8 @@ import com.example.montychat.R;
 import com.example.montychat.listeners.ConversionListener;
 import com.example.montychat.models.User;
 import com.example.montychat.models.chatMessage;
+import com.example.montychat.utilities.Constants;
+import com.example.montychat.utilities.PreferenceManager;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -26,11 +28,13 @@ public class RecentConversationAdapter extends RecyclerView.Adapter<RecentConver
     private final Context context;
     private final List<chatMessage> conversations;
     private final ConversionListener listener;
+    private final PreferenceManager preferenceManager;
 
     public RecentConversationAdapter(Context context, List<chatMessage> conversations, ConversionListener listener) {
         this.context = context;
         this.conversations = conversations;
         this.listener = listener;
+        this.preferenceManager = new PreferenceManager(context);
     }
 
     @NonNull
@@ -56,7 +60,6 @@ public class RecentConversationAdapter extends RecyclerView.Adapter<RecentConver
         private final TextView textName;
         private final TextView textRecentMessage;
 
-
         public ConversionViewHolder(View itemView) {
             super(itemView);
             imageProfile = itemView.findViewById(R.id.imageProfile_R);
@@ -67,10 +70,14 @@ public class RecentConversationAdapter extends RecyclerView.Adapter<RecentConver
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
                     chatMessage conversation = conversations.get(position);
+                    if (preferenceManager.getString(Constants.KEY_USER_ID).equals(conversation.senderId)) {
+                        // Add your specific logic here if needed
+                    }
                     User user = new User();
                     user.image = conversation.conversionImage;
                     user.name = conversation.conversionName;
                     user.id = conversation.conversionId;
+                    user.email = conversation.conversationEmail;
                     listener.onConversionListener(user);
                 }
             });
@@ -79,16 +86,17 @@ public class RecentConversationAdapter extends RecyclerView.Adapter<RecentConver
         public void bind(chatMessage conversation) {
             textName.setText(conversation.conversionName);
             textRecentMessage.setText(conversation.message);
-            if(conversation.conversionImage != null){
+            if (conversation.conversionImage != null) {
                 imageProfile.setImageBitmap(getUserImage_R(conversation.conversionImage));
             }
             // Format the date and time
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
             String formattedDate = sdf.format(conversation.dateObject);
         }
-        private Bitmap getUserImage_R (String encoded){
-            byte [] bytes = Base64.decode(encoded, Base64.DEFAULT);
-            return BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+
+        private Bitmap getUserImage_R(String encoded) {
+            byte[] bytes = Base64.decode(encoded, Base64.DEFAULT);
+            return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         }
     }
 }

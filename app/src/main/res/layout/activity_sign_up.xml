@@ -62,14 +62,19 @@
                     android:layout_marginTop="60dp"
                     android:shape="oval">
 
-                    <com.google.android.material.imageview.ShapeableImageView
+
+                    <com.makeramen.roundedimageview.RoundedImageView
                         android:id="@+id/imageProfile"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:background="@drawable/image_back"
                         android:scaleType="centerCrop"
-                        android:shape="oval"
-                        app:riv_oval="true" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:riv_oval="true"
+                        android:layout_margin="5dp"
+
+                        />
 
                     <TextView
                         android:id="@+id/textAddImage"
