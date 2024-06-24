@@ -28,7 +28,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="650dp"
+        android:layout_height="600dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
 
@@ -104,7 +104,7 @@
                     app:cornerRadius="15dp" />
 
                 <ProgressBar
-                    android:id="@+id/progresBar1"
+                    android:id="@+id/progresBar2"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="center"

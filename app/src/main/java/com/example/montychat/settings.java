@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.montychat.ViewModels.chat_with_user_View_Model;
 import com.example.montychat.models.User;
 import com.example.montychat.utilities.Constants;
+import com.example.montychat.utilities.NotificationHelper;
 import com.example.montychat.utilities.PreferenceManager;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -30,6 +31,7 @@ import java.util.HashMap;
 
 public class settings extends AppCompatActivity {
 
+    private static final String CHANNEL_ID = "chanel_id";
     User receiverUser;
     com.makeramen.roundedimageview.RoundedImageView profile;
     EditText name, email;
@@ -49,6 +51,9 @@ public class settings extends AppCompatActivity {
         name = findViewById(R.id.edit_user_name_s);
         email = findViewById(R.id.edit_user_email_s);
         update = findViewById(R.id.button_up_date_s);
+
+        NotificationHelper.createNotificationChannel(this);
+
 
         preferenceManager = new PreferenceManager(getApplicationContext());
         viewModel = new chat_with_user_View_Model();
@@ -139,6 +144,7 @@ public class settings extends AppCompatActivity {
 
                     // Update conversations with new details
                     viewModel.updateAllConversationsWithNewDetails(preferenceManager);
+
 
                     showToast("Details updated successfully!");
                     Intent intent = new Intent(settings.this, MainActivity.class);

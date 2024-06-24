@@ -47,7 +47,7 @@ public class log_In extends AppCompatActivity {
         pass = findViewById(R.id.input_pass);
         signIn = findViewById(R.id.Sign_In_Button);
         createNewAccount = findViewById(R.id.Create_text);
-        progressBar = findViewById(R.id.progresBar1);
+        progressBar = findViewById(R.id.progresBar2);
 
 
             signIn.setOnClickListener(new View.OnClickListener() {
@@ -72,7 +72,7 @@ public class log_In extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
     }
     private void signIn(){
-        //loading(true);
+        loading(true);
         FirebaseFirestore database = FirebaseFirestore.getInstance();
         database.collection(Constants.KEY_COLLECTION_USERS)
                 .whereEqualTo(Constants.KEY_EMAIL,email.getText().toString())

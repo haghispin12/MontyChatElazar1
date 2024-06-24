@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
 
         preferenceManager = new PreferenceManager(getApplicationContext());
 
+
+
         init();
         loadUserDetails();
         getToken();

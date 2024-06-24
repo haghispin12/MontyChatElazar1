@@ -37,7 +37,6 @@ android {
 dependencies {
 
     //noinspection GradleCompatible,GradleCompatible,GradleCompatible,GradleCompatible
-    implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.google.firebase:firebase-firestore:24.8.1")
@@ -52,13 +51,17 @@ dependencies {
     implementation("com.makeramen:roundedimageview:2.3.0")
     //Firebase
 
-    implementation("com.google.firebase:firebase-messaging-ktx:23.2.1")
-    implementation("com.google.firebase:firebase-firestore-ktx:24.8.1")
+    implementation("com.google.firebase:firebase-messaging-ktx:24.0.0")
+    implementation("com.google.firebase:firebase-firestore-ktx:25.0.0")
 
     //MultiDex
     implementation ("androidx.multidex:multidex:2.0.1")
 
     implementation ("com.squareup.picasso:picasso:2.71828")
+
+
+    implementation("androidx.core:core-:1.13.1")
+
 
 
 
