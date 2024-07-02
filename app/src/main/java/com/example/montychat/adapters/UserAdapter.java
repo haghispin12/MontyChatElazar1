@@ -59,7 +59,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         View view;
         User user;
 
-         UserViewHolder(View itemView) {
+        UserViewHolder(View itemView) {
             super(itemView);
             userPicture = itemView.findViewById(R.id.imageProfile);
             userName = itemView.findViewById(R.id.textName_I);
@@ -76,10 +76,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
         }
         void setUserData (User user){
-             userName.setText(user.name);
-             userEmail.setText(user.email);
-             userPicture.setImageBitmap(getUserImage(user.image));
-             view.getRootView().setOnClickListener(v-> userListener.onUserClicked(user));
+            userName.setText(user.name);
+            userEmail.setText(user.email);
+            userPicture.setImageBitmap(getUserImage(user.image));
+            view.getRootView().setOnClickListener(v-> userListener.onUserClicked(user));
         }
     }
     private Bitmap getUserImage (String encoded){

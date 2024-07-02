@@ -67,32 +67,7 @@ public class chat_with_user_View_Model extends ViewModel {
                 .addSnapshotListener(eventListener);
     }
 
-//    private final EventListener<QuerySnapshot> eventListener = (value, error) -> {
-//        if (error != null) {
-//            errorMessageLiveData.postValue(error.getMessage());
-//            return;
-//        }
-//        if (value != null) {
-//            for (DocumentChange documentChange : value.getDocumentChanges()) {
-//                if (documentChange.getType() == DocumentChange.Type.ADDED) {
-//                    chatMessage chatMessage = new chatMessage();
-//                    chatMessage.senderId = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
-//                    chatMessage.receiverId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
-//                    chatMessage.message = documentChange.getDocument().getString(Constants.KEY_MESSAGE);
-//                    chatMessage.message = documentChange.getDocument().getString(Constants.KEY_IMAGE_MESSAGE);
-//                    chatMessage.dateTime = getReadableDateTime(documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP));
-//                    chatMessage.dateObject = documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
-//                    List<chatMessage> currentMessages = chatMessagesLiveData.getValue();
-//                    if (currentMessages == null) {
-//                        currentMessages = new ArrayList<>();
-//                    }
-//                    currentMessages.add(chatMessage);
-//                    Collections.sort(currentMessages, (obj1, obj2) -> obj1.dateObject.compareTo(obj2.dateObject));
-//                    chatMessagesLiveData.postValue(currentMessages);
-//                }
-//            }
-//        }
-//    };
+
 
     private void addConversion(HashMap<String, Object> conversion) {
         database.collection(Constants.KEY_COLLECTION_CONVERSATIONS)

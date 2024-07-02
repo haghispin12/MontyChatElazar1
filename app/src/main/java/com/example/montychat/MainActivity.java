@@ -17,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.montychat.adapters.RecentConversationAdapter;
-import com.example.montychat.firebase.FCMNotificationServes;
 import com.example.montychat.listeners.ConversionListener;
 import com.example.montychat.models.User;
 import com.example.montychat.models.chatMessage;
@@ -71,8 +70,6 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
 
         getWindow().setStatusBarColor(ContextCompat.getColor(MainActivity.this,R.color.dark));
 
-
-        FCMNotificationServes fcmNotificationServes = new FCMNotificationServes();
 
         init();
         loadUserDetails();

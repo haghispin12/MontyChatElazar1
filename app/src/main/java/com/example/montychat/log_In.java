@@ -53,23 +53,23 @@ public class log_In extends AppCompatActivity {
         progressBar = findViewById(R.id.progresBar2);
 
 
-            signIn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(isValidsSignInDetails()){
-                        signIn();
-                    }
+        signIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isValidsSignInDetails()){
+                    signIn();
                 }
-            });
-            createNewAccount.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(log_In.this, Sign_Up.class);
-                    startActivity(intent);
-                    finish();
+            }
+        });
+        createNewAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(log_In.this, Sign_Up.class);
+                startActivity(intent);
+                finish();
 
-                }
-            });
+            }
+        });
     }
     private void showToast (String s ){
         Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();

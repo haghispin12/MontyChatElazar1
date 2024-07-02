@@ -146,7 +146,6 @@ public class chat_with_user extends AppCompatActivity {
     private void setListeners() {
         layoutSend.setOnClickListener(view -> {
             vm.sendMessage(inputMessage.getText().toString(), capturedImage, receiverUser, conversionId, preferenceManager);
-            //sendNotification(inputMessage.getText().toString(), receiverUser, chat_with_user.this,getIntent().getStringExtra("token"));
             inputMessage.setText("");
         });
 
@@ -199,63 +198,6 @@ public class chat_with_user extends AppCompatActivity {
             conversionId = documentSnapshot.getId();
         }
     };
-
-//    public void sendNotification(String message, User otherUser, Context context,String token1) {
-//        if (otherUser.name != null && token1 != null && message != null) {
-//            try {
-//                JSONObject jsonObject = new JSONObject();
-//
-//                JSONObject notificationJSON = new JSONObject();
-//                notificationJSON.put("title", otherUser.getName());
-//                notificationJSON.put("body", message);
-//
-//                JSONObject dataJSON = new JSONObject();
-//                dataJSON.put("userId", otherUser.id);
-//
-//                JSONObject messageJSON = new JSONObject();
-//                messageJSON.put("token", token1);
-//                messageJSON.put("notification", notificationJSON);
-//                messageJSON.put("data", dataJSON);
-//
-//                jsonObject.put("message", messageJSON);
-//
-//                callAPI(jsonObject, context);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-
-//    void callAPI(JSONObject jsonObject, Context context) {
-//        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-//
-//        OkHttpClient client = new OkHttpClient();
-//        RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
-//        Request request = new Request.Builder()
-//                .url(FCM_URL)
-//                .post(body)
-//                .header("Authorization", "key=" + SERVER_KEY)
-//                .build();
-//
-//        showToast("Sending notification...");
-//
-//        client.newCall(request).enqueue(new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                showToast("Failed ");
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                if (!response.isSuccessful()) {
-//                    throw new IOException("Unexpected code " + response);
-//                }else showToast("not sanded notification");
-//
-//                String responseData = response.body().string();
-//                showToast("Notification sent: " + responseData);
-//            }
-//        });
-//    }
 
     public void showToast(String s, Context context) {
         runOnUiThread(() -> Toast.makeText(context, s, Toast.LENGTH_SHORT).show());
