@@ -1,5 +1,6 @@
 package com.example.montychat;
 
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.montychat.ViewModels.chat_with_user_View_Model;
@@ -36,7 +38,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class chat_with_user extends AppCompatActivity  {
+public class chat_with_user extends AppCompatActivity {
 
     private User receiverUser;
     private List<chatMessage> chatMessages;
@@ -44,10 +46,6 @@ public class chat_with_user extends AppCompatActivity  {
     private PreferenceManager preferenceManager;
     private FirebaseFirestore database;
     private String conversionId = null;
-
-
-    //from her designs variable
-
 
     TextView textName;
     androidx.appcompat.widget.AppCompatImageView imageBack;
@@ -64,13 +62,10 @@ public class chat_with_user extends AppCompatActivity  {
     Button btnGallery;
     Button btnCamera;
 
-    //up to her designs variable
+    private static final String FCM_URL = "https://fcm.googleapis.com/v1/projects/monty-chat-9bf8e/messages:send";
+    private static final String SERVER_KEY = "162a74b472d90c645f7670a729bb6c7e50812e7d";
 
     chat_with_user_View_Model vm;
-   // private  EventListener<QuerySnapshot> eventListener;
-
-
-
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -78,7 +73,6 @@ public class chat_with_user extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_with_user);
 
-        //assign each item to its activity
         textName = findViewById(R.id.textName_chat);
         imageBack = findViewById(R.id.image_back);
         adapter = findViewById(R.id.chatRecyclerView);
@@ -92,35 +86,32 @@ public class chat_with_user extends AppCompatActivity  {
         btnGallery = findViewById(R.id.btnGallery);
         btnCamera = findViewById(R.id.btnCamera);
 
+        getWindow().setStatusBarColor(ContextCompat.getColor(chat_with_user.this, R.color.dark));
 
         vm = new ViewModelProvider(this).get(chat_with_user_View_Model.class);
 
         setListeners();
         loadReceiverDetails();
         init();
-        //eventListener = vm.buildEventListener(chatMessages,chatAdapter,adapter,progsesBar_Chat,preferenceManager.getString(Constants.KEY_USER_ID),receiverUser,conversionId);
 
-        vm.listenMessages(preferenceManager.getString(Constants.KEY_USER_ID),receiverUser.id,eventListener);
-
+        vm.listenMessages(preferenceManager.getString(Constants.KEY_USER_ID), receiverUser.id, eventListener);
     }
-    private void init (){//function that prepare the activity to be used/.
 
+    private void init() {
         preferenceManager = new PreferenceManager(this);
         chatMessages = new ArrayList<>();
-        chatAdapter = new chatAdapter((Context) this,chatMessages);
+        chatAdapter = new chatAdapter(this, chatMessages);
         adapter.setAdapter(chatAdapter);
         database = FirebaseFirestore.getInstance();
     }
 
-
-
-    private final EventListener<QuerySnapshot> eventListener = (value, error)->{
-        if(error != null){
+    private final EventListener<QuerySnapshot> eventListener = (value, error) -> {
+        if (error != null) {
             return;
         }
-        if(value != null){
-            for (DocumentChange documentChange : value.getDocumentChanges()){
-                if(documentChange.getType() == DocumentChange.Type.ADDED){
+        if (value != null) {
+            for (DocumentChange documentChange : value.getDocumentChanges()) {
+                if (documentChange.getType() == DocumentChange.Type.ADDED) {
                     chatMessage chatMessage = new chatMessage();
                     chatMessage.senderId = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
                     chatMessage.receiverId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
@@ -133,7 +124,7 @@ public class chat_with_user extends AppCompatActivity  {
             }
             Collections.sort(chatMessages, (obj1, obj2) -> obj1.dateObject.compareTo(obj2.dateObject));
 
-            if(chatAdapter.getItemCount() == 0){
+            if (chatAdapter.getItemCount() == 0) {
                 chatAdapter.notifyDataSetChanged();
             } else {
                 chatAdapter.notifyItemRangeInserted(chatMessages.size(), chatMessages.size());
@@ -142,53 +133,47 @@ public class chat_with_user extends AppCompatActivity  {
             adapter.setVisibility(View.VISIBLE);
         }
         progsesBar_Chat.setVisibility(View.GONE);
-        if(conversionId == null){
+        if (conversionId == null) {
             checkForConversion();
         }
     };
 
-
-    private void loadReceiverDetails(){
+    private void loadReceiverDetails() {
         receiverUser = (User) getIntent().getSerializableExtra(Constants.KEY_USER);
         textName.setText(receiverUser.name);
     }
-    private void setListeners (){
 
-        layoutSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                vm.sendMessage(inputMessage.getText().toString(),capturedImage,receiverUser,conversionId,preferenceManager);
-                inputMessage.setText("");
-            }
+    private void setListeners() {
+        layoutSend.setOnClickListener(view -> {
+            vm.sendMessage(inputMessage.getText().toString(), capturedImage, receiverUser, conversionId, preferenceManager);
+            //sendNotification(inputMessage.getText().toString(), receiverUser, chat_with_user.this,getIntent().getStringExtra("token"));
+            inputMessage.setText("");
         });
-        imageBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
+
+        imageBack.setOnClickListener(v -> {
+
+//            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//            startActivity(intent);
+            finish();
         });
-        infoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(chat_with_user.this,showUser.class);
-                intent.putExtra(Constants.KEY_USER,receiverUser);
-                startActivity(intent);
-            }
+
+        infoButton.setOnClickListener(v -> {
+            Intent intent = new Intent(chat_with_user.this, showUser.class);
+            intent.putExtra(Constants.KEY_USER, receiverUser);
+            startActivity(intent);
         });
     }
 
-    private String getReadableDateTime (Date date){
+    private String getReadableDateTime(Date date) {
         return new SimpleDateFormat("MMMM dd, yyyy - hh:mm a", Locale.getDefault()).format(date);
     }
 
-    private void showToast (String s) {
+    private void showToast(String s) {
         Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
     }
 
-    private void checkForConversion () {
-        if(chatMessages.size() != 0){
+    private void checkForConversion() {
+        if (chatMessages.size() != 0) {
             checkForConversionRemotely(
                     preferenceManager.getString(Constants.KEY_USER_ID),
                     receiverUser.id
@@ -200,20 +185,79 @@ public class chat_with_user extends AppCompatActivity  {
         }
     }
 
-    private void checkForConversionRemotely (String senderId, String receiverId){
+    private void checkForConversionRemotely(String senderId, String receiverId) {
         database.collection(Constants.KEY_COLLECTION_CONVERSATIONS)
-                .whereEqualTo(Constants.KEY_SENDER_ID,senderId)
+                .whereEqualTo(Constants.KEY_SENDER_ID, senderId)
                 .whereEqualTo(Constants.KEY_RECEIVER_ID, receiverId)
                 .get()
                 .addOnCompleteListener(conversionOnCompleteListener);
     }
 
-    private final OnCompleteListener<QuerySnapshot> conversionOnCompleteListener =task -> {
-        if(task.isSuccessful() && task.getResult() != null && task.getResult().getDocuments().size() > 0) {
+    private final OnCompleteListener<QuerySnapshot> conversionOnCompleteListener = task -> {
+        if (task.isSuccessful() && task.getResult() != null && task.getResult().getDocuments().size() > 0) {
             DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
-            conversionId =documentSnapshot.getId();
+            conversionId = documentSnapshot.getId();
         }
     };
 
+//    public void sendNotification(String message, User otherUser, Context context,String token1) {
+//        if (otherUser.name != null && token1 != null && message != null) {
+//            try {
+//                JSONObject jsonObject = new JSONObject();
+//
+//                JSONObject notificationJSON = new JSONObject();
+//                notificationJSON.put("title", otherUser.getName());
+//                notificationJSON.put("body", message);
+//
+//                JSONObject dataJSON = new JSONObject();
+//                dataJSON.put("userId", otherUser.id);
+//
+//                JSONObject messageJSON = new JSONObject();
+//                messageJSON.put("token", token1);
+//                messageJSON.put("notification", notificationJSON);
+//                messageJSON.put("data", dataJSON);
+//
+//                jsonObject.put("message", messageJSON);
+//
+//                callAPI(jsonObject, context);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
+//    void callAPI(JSONObject jsonObject, Context context) {
+//        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+//
+//        OkHttpClient client = new OkHttpClient();
+//        RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
+//        Request request = new Request.Builder()
+//                .url(FCM_URL)
+//                .post(body)
+//                .header("Authorization", "key=" + SERVER_KEY)
+//                .build();
+//
+//        showToast("Sending notification...");
+//
+//        client.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                showToast("Failed ");
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                if (!response.isSuccessful()) {
+//                    throw new IOException("Unexpected code " + response);
+//                }else showToast("not sanded notification");
+//
+//                String responseData = response.body().string();
+//                showToast("Notification sent: " + responseData);
+//            }
+//        });
+//    }
+
+    public void showToast(String s, Context context) {
+        runOnUiThread(() -> Toast.makeText(context, s, Toast.LENGTH_SHORT).show());
+    }
 }

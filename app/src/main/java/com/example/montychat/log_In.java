@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.montychat.utilities.Constants;
 import com.example.montychat.utilities.PreferenceManager;
@@ -34,6 +35,8 @@ public class log_In extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
+
+        getWindow().setStatusBarColor(ContextCompat.getColor(log_In.this,R.color.black));
 
         preferenceManager = new PreferenceManager(getApplicationContext());
 

@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.montychat.utilities.Constants;
 import com.example.montychat.utilities.PreferenceManager;
@@ -53,6 +54,8 @@ public class Sign_Up extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        getWindow().setStatusBarColor(ContextCompat.getColor(Sign_Up.this,R.color.black));
 
         preferenceManager = new PreferenceManager(getApplicationContext());
 

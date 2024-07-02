@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.montychat.adapters.UserAdapter;
 import com.example.montychat.listeners.UserListener;
@@ -41,6 +42,7 @@ public class addChat extends AppCompatActivity implements UserListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_chat);
 
+        getWindow().setStatusBarColor(ContextCompat.getColor(addChat.this,R.color.dark));
 
         backButton = findViewById(R.id.backButton);
         progressBar = findViewById(R.id.progressBar_A);

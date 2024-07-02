@@ -1,12 +1,9 @@
 package com.example.montychat.ViewModels;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.montychat.models.User;
-import com.example.montychat.models.chatMessage;
 import com.example.montychat.utilities.Constants;
 import com.example.montychat.utilities.PreferenceManager;
 import com.google.firebase.firestore.DocumentReference;
@@ -18,23 +15,15 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 
 public class chat_with_user_View_Model extends ViewModel {
 
     private final FirebaseFirestore database = FirebaseFirestore.getInstance();
-    private final MutableLiveData<List<chatMessage>> chatMessagesLiveData = new MutableLiveData<>();
-    private final MutableLiveData<String> errorMessageLiveData = new MutableLiveData<>();
     private String conversionId = null;
 
-    public LiveData<List<chatMessage>> getChatMessages() {
-        return chatMessagesLiveData;
-    }
 
-    public LiveData<String> getErrorMessage() {
-        return errorMessageLiveData;
-    }
+
 
     public void sendMessage(@NonNull String messageText, String capturedImage, User receiverUser, String conversionId, PreferenceManager preferenceManager) {
         HashMap<String, Object> message = new HashMap<>();
@@ -64,6 +53,8 @@ public class chat_with_user_View_Model extends ViewModel {
             }
         }
     }
+
+
 
     public void listenMessages(String receiverUserId, String currentUserId, EventListener<QuerySnapshot>eventListener) {
         database.collection(Constants.KEY_COLLECTION_CHAT)

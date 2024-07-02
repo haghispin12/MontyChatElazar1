@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.montychat.models.User;
 import com.example.montychat.utilities.Constants;
@@ -27,6 +28,9 @@ public class showUser extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_user);
+
+        getWindow().setStatusBarColor(ContextCompat.getColor(showUser.this,R.color.input_back2));
+
 
         email = findViewById(R.id.userEmailInfo);
         name = findViewById(R.id.userNameInfo);

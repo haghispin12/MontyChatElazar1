@@ -12,16 +12,22 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.montychat.adapters.RecentConversationAdapter;
+import com.example.montychat.firebase.FCMNotificationServes;
 import com.example.montychat.listeners.ConversionListener;
 import com.example.montychat.models.User;
 import com.example.montychat.models.chatMessage;
 import com.example.montychat.utilities.Constants;
 import com.example.montychat.utilities.PreferenceManager;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,7 +35,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -45,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
     private List<chatMessage> chatMessages;
     private RecentConversationAdapter conversationAdapter;
     private FirebaseFirestore database;
+    String token;
+    String otherToken;
 
 
 
@@ -62,7 +69,10 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
 
         preferenceManager = new PreferenceManager(getApplicationContext());
 
+        getWindow().setStatusBarColor(ContextCompat.getColor(MainActivity.this,R.color.dark));
 
+
+        FCMNotificationServes fcmNotificationServes = new FCMNotificationServes();
 
         init();
         loadUserDetails();
@@ -105,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     private final EventListener <QuerySnapshot> eventListener = (value, error) -> {
         if (error != null) {
             return;
@@ -144,17 +155,16 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
                     for (int i = 0; i < chatMessages.size(); i++) {
                         String senderId = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
                         String receiverId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
-                        if (chatMessages.get(i).senderId.equals(senderId) && chatMessages.get(i).receiverId.equals(receiverId) ) {
+                        if (chatMessages.get(i).senderId.equals(senderId) && chatMessages.get(i).receiverId.equals(receiverId) && senderId.equals(preferenceManager.getString(Constants.KEY_USER_ID)) ) {
                             chatMessages.get(i).message = documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE);
                             chatMessages.get(i).dateObject = documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
-                            //chatMessages.get(i).conversionName = documentChange.getDocument().getData(Constants.)
                             break;
                         }
                     }
                 }
             }
 
-            Collections.sort(chatMessages, (obj1, obj2) -> obj2.dateObject.compareTo(obj1.dateObject));
+            chatMessages.sort((obj1, obj2) -> obj2.dateObject.compareTo(obj1.dateObject));
             conversationAdapter.notifyDataSetChanged();
             conversationRecyclerView.smoothScrollToPosition(0);
             conversationRecyclerView.setVisibility(View.VISIBLE);
@@ -168,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
     }
 
     private void updateToken (String token){
+        this.token = token;
         FirebaseFirestore database = FirebaseFirestore.getInstance();
         DocumentReference documentReference =
                 database.collection(Constants.KEY_COLLECTION_USERS).document(preferenceManager.getString(Constants.KEY_USER_ID));
@@ -187,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
                 .addOnSuccessListener(unused -> {
                     preferenceManager.clear();
                     startActivity(new Intent(getApplicationContext(), log_In.class));
-                    finish();
+                    //finish();
                 })
                 .addOnFailureListener(e -> {
                     showToast("Unable to sign out");
@@ -224,10 +235,24 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
 
     @Override
     public void onConversionListener(User user) {
+        database.collection("users").document(user.id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()){
+                        otherToken = document.getString(Constants.KEY_FCM_TOKEN);
+                        user.token = otherToken;
+                    }
+                }
+            }
+        });
         Intent chatIntent = new Intent(getApplicationContext(), chat_with_user.class);
         chatIntent.putExtra(Constants.KEY_USER, user);
+        chatIntent.putExtra("token",token);
         startActivity(chatIntent);
-        finish();
+        //finish();
     }
+
 
 }

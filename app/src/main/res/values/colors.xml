@@ -5,10 +5,12 @@
     <color name="primary">#45FFFFFF</color>
     <color name="primary_dark">#C6BD364C</color>
     <color name="primary_text">#191114</color>
-    <color name="dark_clear">#7C202020</color>
+    <color name="dark_clear">#7187FF</color>
+    <color name="dark">#DD040404</color>
+
     <color name="secondary_text">#605A5A</color>
     <color name="input_back">#9CFFFFFF</color>
-    <color name="input_back2">#8D40A8F8</color>
+    <color name="input_back2">#6A8C6B</color>
     <color name="icon_back">#B93C3C3C</color>
     <color name="eror">#FF4763</color>
     <color name="color">#5E5858</color>

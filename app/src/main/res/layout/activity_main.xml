@@ -45,7 +45,7 @@
             android:maxLines="1"
             android:textStyle="bold"
             android:textSize="30sp"
-            android:textColor="@color/back" />
+            android:textColor="@color/input_back2" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageSignOut"
@@ -107,7 +107,7 @@
         android:layout_marginEnd="20dp"
         android:contentDescription="@string/app_name"
         android:src="@drawable/round_add"
-        android:backgroundTint="@color/back"
+        android:backgroundTint="@color/input_back2"
         android:background="@drawable/chat_input"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
