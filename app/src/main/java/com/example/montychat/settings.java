@@ -22,11 +22,14 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.montychat.ViewModels.chat_with_user_View_Model;
-import com.example.montychat.models.User;
 import com.example.montychat.utilities.Constants;
 import com.example.montychat.utilities.PreferenceManager;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -35,11 +38,8 @@ import java.util.HashMap;
 
 public class settings extends AppCompatActivity {
 
-
-    private static final String CHANNEL_ID = "chanel_id";
     private static final int REQUEST_NOTIFICATION_PERMISSION = 100;
 
-    User receiverUser;
     com.makeramen.roundedimageview.RoundedImageView profile;
     EditText name, email;
     Button update;
@@ -47,7 +47,7 @@ public class settings extends AppCompatActivity {
 
     PreferenceManager preferenceManager;
     private String encodedImage;
-    private chat_with_user_View_Model viewModel;
+    chat_with_user_View_Model chatWithUserViewModel;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -61,27 +61,18 @@ public class settings extends AppCompatActivity {
         update = findViewById(R.id.button_up_date_s);
         back = findViewById(R.id.backS);
 
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            CharSequence name = "Channel Name";
-//            String description = "Channel Description";
-//            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-//            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-//            channel.setDescription(description);
-//            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-//            notificationManager.createNotificationChannel(channel);
-//        }
-
-        getWindow().setStatusBarColor(ContextCompat.getColor(settings.this,R.color.input_back2));
+        getWindow().setStatusBarColor(ContextCompat.getColor(settings.this, R.color.input_back2));
 
         preferenceManager = new PreferenceManager(getApplicationContext());
-        viewModel = new chat_with_user_View_Model();
+        chatWithUserViewModel = new chat_with_user_View_Model();
 
-        String nameP = (String) getIntent().getSerializableExtra(Constants.KEY_NAME);
-        String imageP = (String) getIntent().getSerializableExtra(Constants.KEY_IMAGE);
-        String emailP = (String) getIntent().getSerializableExtra(Constants.KEY_EMAIL);
+        String nameP = getIntent().getStringExtra(Constants.KEY_NAME);
+        String imageP = getIntent().getStringExtra(Constants.KEY_IMAGE);
+        String emailP = getIntent().getStringExtra(Constants.KEY_EMAIL);
 
         if (imageP != null) {
-            profile.setImageBitmap(getUserImage_R(imageP));
+            String imageUrl = preferenceManager.getString(Constants.KEY_IMAGE);
+            Picasso.get().load(imageUrl).into(profile);
             encodedImage = imageP;
         }
         if (nameP != null) {
@@ -101,17 +92,14 @@ public class settings extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 updateUserDetails();
-
-
+                chatWithUserViewModel.updateAllConversationsWithNewDetails(preferenceManager);
             }
         });
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(settings.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
+
+        back.setOnClickListener(v -> {
+            Intent intent = new Intent(settings.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         });
     }
 
@@ -125,7 +113,7 @@ public class settings extends AppCompatActivity {
                             InputStream inputStream = getContentResolver().openInputStream(imageUri);
                             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                             profile.setImageBitmap(bitmap);
-                            encodedImage = encodeImage(bitmap);
+                            uploadImageToFirebaseStorage(bitmap);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
@@ -133,6 +121,24 @@ public class settings extends AppCompatActivity {
                 }
             }
     );
+
+    private void uploadImageToFirebaseStorage(Bitmap bitmap) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference();
+        String userId = preferenceManager.getString(Constants.KEY_USER_ID);
+        StorageReference imageRef = storageReference.child("profile_images/" + userId + ".jpg");
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = imageRef.putBytes(data);
+        uploadTask.addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            encodedImage = uri.toString();
+            showToast("Image uploaded successfully!");
+            preferenceManager.putString(Constants.KEY_IMAGE,encodedImage);
+        })).addOnFailureListener(e -> showToast("Failed to upload image: " + e.getMessage()));
+    }
 
     private void updateUserDetails() {
         FirebaseFirestore database = FirebaseFirestore.getInstance();
@@ -176,10 +182,9 @@ public class settings extends AppCompatActivity {
                     preferenceManager.putString(Constants.KEY_EMAIL, email.getText().toString());
                     preferenceManager.putString(Constants.KEY_IMAGE, encodedImage);
 
-                    // Update conversations with new details
-                    viewModel.updateAllConversationsWithNewDetails(preferenceManager);
-
                     showToast("Details updated successfully!");
+
+                     // Update all conversations
 
                     if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, REQUEST_NOTIFICATION_PERMISSION);
@@ -196,32 +201,12 @@ public class settings extends AppCompatActivity {
 
 
     private void showUpdateNotification() {
-//        String message = "Your profile details have been updated successfully!";
-//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-//                .setSmallIcon(R.drawable.designer2)
-//                .setContentTitle("Profile Update")
-//                .setContentText(message)
-//                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-//
-//        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-//        notificationManager.notify(1, builder.build());
+        // Notification code goes here
     }
 
-
-
-    private Bitmap getUserImage_R(String encoded) {
+    private Bitmap getUserImageFromEncodedString(String encoded) {
         byte[] bytes = Base64.decode(encoded, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-    }
-
-    private String encodeImage(Bitmap bitmap) {
-        int previewWidth = 150;
-        int previewHeight = bitmap.getHeight() * previewWidth / bitmap.getWidth();
-        Bitmap previewBitmap = Bitmap.createScaledBitmap(bitmap, previewWidth, previewHeight, false);
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        previewBitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
-        byte[] bytes = byteArrayOutputStream.toByteArray();
-        return Base64.encodeToString(bytes, Base64.DEFAULT);
     }
 
     private void showToast(String s) {
@@ -239,7 +224,4 @@ public class settings extends AppCompatActivity {
             }
         }
     }
-
-
 }
-

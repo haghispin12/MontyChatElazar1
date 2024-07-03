@@ -62,6 +62,7 @@ public class chat_with_user extends AppCompatActivity {
     Button btnGallery;
     Button btnCamera;
 
+
     private static final String FCM_URL = "https://fcm.googleapis.com/v1/projects/monty-chat-9bf8e/messages:send";
     private static final String SERVER_KEY = "162a74b472d90c645f7670a729bb6c7e50812e7d";
 
@@ -113,12 +114,15 @@ public class chat_with_user extends AppCompatActivity {
             for (DocumentChange documentChange : value.getDocumentChanges()) {
                 if (documentChange.getType() == DocumentChange.Type.ADDED) {
                     chatMessage chatMessage = new chatMessage();
+
+
                     chatMessage.senderId = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
                     chatMessage.receiverId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
                     chatMessage.message = documentChange.getDocument().getString(Constants.KEY_MESSAGE);
                     chatMessage.dateTime = getReadableDateTime(documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP));
                     chatMessage.dateObject = documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
                     chatMessage.ImageMessageChat = documentChange.getDocument().getString(Constants.KEY_IMAGE_MESSAGE);
+
                     chatMessages.add(chatMessage);
                 }
             }
@@ -198,6 +202,17 @@ public class chat_with_user extends AppCompatActivity {
             conversionId = documentSnapshot.getId();
         }
     };
+
+    private boolean isAtLeastOneDayAfter(Date firstDate, Date secondDate) {
+        // חישוב ההפרש במילישניות
+        long differenceInMillis = secondDate.getTime() - firstDate.getTime();
+
+        // חישוב ההפרש בימים
+        long differenceInDays = differenceInMillis / (1000 * 60 * 60 * 24);
+
+        // החזרת true אם ההפרש הוא יום אחד או יותר, אחרת false
+        return differenceInDays >= 1;
+    }
 
     public void showToast(String s, Context context) {
         runOnUiThread(() -> Toast.makeText(context, s, Toast.LENGTH_SHORT).show());

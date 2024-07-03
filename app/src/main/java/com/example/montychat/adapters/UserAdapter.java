@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.montychat.R;
 import com.example.montychat.listeners.UserListener;
 import com.example.montychat.models.User;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -40,7 +41,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         User user = userList.get(position);
 
-        holder.userPicture.setImageBitmap(getUserImage(user.image));
+        Picasso.get().load(user.image).into(holder.userPicture);
         holder.userName.setText(user.name);
         holder.userEmail.setText(user.email);
 
@@ -78,7 +79,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         void setUserData (User user){
             userName.setText(user.name);
             userEmail.setText(user.email);
-            userPicture.setImageBitmap(getUserImage(user.image));
+            Picasso.get().load(user.image).into(userPicture);
             view.getRootView().setOnClickListener(v-> userListener.onUserClicked(user));
         }
     }

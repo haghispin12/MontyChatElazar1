@@ -97,6 +97,7 @@
                 android:layout_margin="40dp"
                 android:backgroundTint="@color/black"
                 android:text="update"
+                android:textColor="@color/white"
                 android:textSize="36sp"/>
     </LinearLayout>
 

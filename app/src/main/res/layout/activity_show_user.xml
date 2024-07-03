@@ -20,8 +20,8 @@
         android:textStyle="bold"/>
 
     <FrameLayout
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
         android:layout_gravity="center_horizontal">
 
         <com.makeramen.roundedimageview.RoundedImageView
@@ -69,6 +69,7 @@
             android:gravity="center_vertical"
             android:paddingStart="65dp"
             android:text="Back to chat"
+            android:textColor="@color/white"
             android:textSize="30sp" />
 
         <ImageView

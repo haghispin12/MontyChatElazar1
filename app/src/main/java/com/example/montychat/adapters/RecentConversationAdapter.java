@@ -18,6 +18,7 @@ import com.example.montychat.models.User;
 import com.example.montychat.models.chatMessage;
 import com.example.montychat.utilities.Constants;
 import com.example.montychat.utilities.PreferenceManager;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -87,7 +88,7 @@ public class RecentConversationAdapter extends RecyclerView.Adapter<RecentConver
             textName.setText(conversation.conversionName);
             textRecentMessage.setText(conversation.message);
             if (conversation.conversionImage != null) {
-                imageProfile.setImageBitmap(getUserImage_R(conversation.conversionImage));
+                Picasso.get().load(conversation.conversionImage).into(imageProfile);
             }
             // Format the date and time
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());

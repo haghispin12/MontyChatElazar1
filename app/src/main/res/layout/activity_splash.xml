@@ -21,11 +21,18 @@
         android:textColor="@color/white"/>
 
 
-    <ImageView
+    <com.makeramen.roundedimageview.RoundedImageView
         android:layout_width="170dp"
         android:layout_height="170dp"
-        android:src="@drawable/firefly_simple_messaging_app_logo__style__white_and_khaki_green_color_centered_with_a_modern_graphic"
-        android:layout_gravity="center"/>
+        android:background="@drawable/image_back"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:riv_oval="true"
+        android:src="@drawable/_91d3108_57a4_4a55_a9ad_29be045ba9da"
+        android:layout_margin="5dp"
+        android:layout_gravity="center"
+        />
 
     <ProgressBar
         android:layout_width="wrap_content"

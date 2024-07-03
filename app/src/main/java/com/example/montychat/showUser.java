@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.montychat.models.User;
 import com.example.montychat.utilities.Constants;
+import com.squareup.picasso.Picasso;
 
 public class showUser extends AppCompatActivity {
 
@@ -44,7 +45,7 @@ public class showUser extends AppCompatActivity {
             name.setText(receiverUser.name);
         }
         if(receiverUser.image != null){
-            profile.setImageBitmap(getUserImage_R(receiverUser.image));
+            Picasso.get().load(receiverUser.image).into(profile);
             temp.setVisibility(View.GONE);
         }
 
