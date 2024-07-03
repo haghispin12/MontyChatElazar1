@@ -261,13 +261,13 @@ public class chat_with_user extends AppCompatActivity {
     }
 
 
-    // Convert Bitmap to Uri
-    private Uri getImageUri(Bitmap bitmap) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "Title", null);
-        return Uri.parse(path);
-    }
+//    // Convert Bitmap to Uri
+//    private Uri getImageUri(Bitmap bitmap) {
+//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+//        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "Title", null);
+//        return Uri.parse(path);
+//    }
 
     // Upload image to Firebase Storage
     private void uploadImageToFirebase(Bitmap bitmap) {

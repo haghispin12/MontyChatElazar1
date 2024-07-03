@@ -32,6 +32,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -112,9 +113,9 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
         if (error != null) {
             return;
         }
+
         if (value != null) {
             for (DocumentChange documentChange : value.getDocumentChanges()) {
-
                 if (documentChange.getType() == DocumentChange.Type.ADDED) {
                     String senderId = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
                     String receiverId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
@@ -128,27 +129,28 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
                         chatMessage.conversionName = documentChange.getDocument().getString(Constants.KEY_RECEIVER_NAME);
                         chatMessage.conversionId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
                         chatMessage.conversationEmail = documentChange.getDocument().getString(Constants.KEY_RECEIVER_EMAIL);
-
                     } else {
                         chatMessage.conversionImage = documentChange.getDocument().getString(Constants.KEY_SENDER_IMAGE);
                         chatMessage.conversionName = documentChange.getDocument().getString(Constants.KEY_SENDER_NAME);
                         chatMessage.conversionId = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
                         chatMessage.conversationEmail = documentChange.getDocument().getString(Constants.KEY_SENDER_EMAIL);
-
                     }
 
-                    chatMessage.message = documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE);
+                    if(documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE) != null){
+                        chatMessage.message = documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE);
+                    } else chatMessage.message = "photo";
                     chatMessage.dateObject = documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
 
-                    chatMessages.add(chatMessage);
-
+                    // Add new message to the beginning of the list
+                    chatMessages.add(0, chatMessage);
                 } else if (documentChange.getType() == DocumentChange.Type.MODIFIED) {
-
                     for (int i = 0; i < chatMessages.size(); i++) {
                         String senderId = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
                         String receiverId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
                         if (chatMessages.get(i).senderId.equals(senderId) && chatMessages.get(i).receiverId.equals(receiverId) && senderId.equals(preferenceManager.getString(Constants.KEY_USER_ID))) {
-                            chatMessages.get(i).message = documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE);
+                            if(documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE) != null){
+                                chatMessages.get(i).message = documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE);
+                            } else chatMessages.get(i).message = "photo";
                             chatMessages.get(i).dateObject = documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
                             break;
                         }
@@ -156,13 +158,21 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
                 }
             }
 
-            chatMessages.sort((obj1, obj2) -> obj2.dateObject.compareTo(obj1.dateObject));
+            // Sort the list based on dateObject (assuming it's a Date object)
+            Collections.sort(chatMessages, (obj1, obj2) -> obj2.dateObject.compareTo(obj1.dateObject));
+
+            // Notify adapter of dataset change
             conversationAdapter.notifyDataSetChanged();
+
+            // Scroll to the top
             conversationRecyclerView.smoothScrollToPosition(0);
+
+            // Make RecyclerView visible and hide progress bar
             conversationRecyclerView.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
         }
     };
+
 
 
     private void getToken() {
