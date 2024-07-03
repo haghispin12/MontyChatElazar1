@@ -105,6 +105,16 @@
         app:layout_constraintTop_toTopOf="@+id/view_back"
         />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        tools:ignore="MissingConstraints">
+
+
+
+    </LinearLayout>
+
     <FrameLayout
         android:id="@+id/layout_send"
         android:layout_width="45dp"
@@ -130,13 +140,14 @@
             android:tint="@color/white"
             />
 
+
     </FrameLayout>
 
     <EditText
         android:id="@+id/input_message"
         android:layout_width="0dp"
         android:layout_height="45dp"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="65dp"
         android:layout_marginLeft="5dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
@@ -153,54 +164,25 @@
         android:textColorHint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/layout_send"
-        app:layout_constraintStart_toStartOf="@+id/CameraButton"
+        app:layout_constraintStart_toStartOf="parent"
+
 
         />
 
     <ImageButton
-        android:visibility="gone"
         android:id="@+id/CameraButton"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="70dp"
+        android:layout_width="50dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/chat_input"
+        android:backgroundTint="@color/primary"
         android:contentDescription="@string/app_name"
         android:src="@drawable/round_photo_camera_24"
-        android:backgroundTint="@color/primary"
-        app:layout_goneMarginEnd="15dp"
-        android:background="@drawable/chat_input"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:tint="@color/white"
-        />
-
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background ="@drawable/back_sent_message"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="MissingConstraints">
-
-        <Button
-            android:id="@+id/btnGallery"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:backgroundTint="@color/color3"
-            android:text="בחר מהגלריה" />
-
-        <Button
-            android:id="@+id/btnCamera"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:backgroundTint="@color/color3"
-            android:text="צלם תמונה" />
-    </LinearLayout>
+        app:layout_goneMarginEnd="15dp"
+        app:tint="@color/white" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

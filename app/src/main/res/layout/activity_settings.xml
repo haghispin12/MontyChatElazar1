@@ -31,8 +31,8 @@
 
         <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/imageProfile_S"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
             android:background="@drawable/image_back"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"

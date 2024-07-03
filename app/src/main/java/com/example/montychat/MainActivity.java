@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -18,6 +19,8 @@ import com.example.montychat.models.User;
 import com.example.montychat.models.chatMessage;
 import com.example.montychat.utilities.Constants;
 import com.example.montychat.utilities.PreferenceManager;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -47,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
     String token;
     String otherToken;
 
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,31 +67,37 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
 
         getWindow().setStatusBarColor(ContextCompat.getColor(MainActivity.this, R.color.dark));
 
+
         init();
         loadUserDetails();
         getToken();
-        setListeners();
-        listenConversations();
+        setLissners();
+        listenConversation();
+
+
     }
+
 
     private void init() {
         chatMessages = new ArrayList<>();
         conversationAdapter = new RecentConversationAdapter(this, chatMessages, this);
-        conversationRecyclerView.setAdapter(conversationAdapter);
+        conversationRecyclerView.setAdapter(conversationAdapter); // Here is the issue
+
         database = FirebaseFirestore.getInstance();
     }
 
+
     private void loadUserDetails() {
         textName.setText(preferenceManager.getString(Constants.KEY_NAME));
-        String imageUrl = preferenceManager.getString(Constants.KEY_IMAGE);
-        Picasso.get().load(imageUrl).into(imageProfile);
+        Picasso.get().load(preferenceManager.getString(Constants.KEY_IMAGE)).into(imageProfile);
+
     }
 
     private void showToast(String s) {
         Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
     }
 
-    private void listenConversations() {
+    private void listenConversation() {
         database.collection(Constants.KEY_COLLECTION_CONVERSATIONS)
                 .whereEqualTo(Constants.KEY_SENDER_ID, preferenceManager.getString(Constants.KEY_USER_ID))
                 .addSnapshotListener(eventListener);
@@ -96,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
                 .addSnapshotListener(eventListener);
     }
 
+
     @SuppressLint("NotifyDataSetChanged")
     private final EventListener<QuerySnapshot> eventListener = (value, error) -> {
         if (error != null) {
@@ -103,10 +114,12 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
         }
         if (value != null) {
             for (DocumentChange documentChange : value.getDocumentChanges()) {
+
                 if (documentChange.getType() == DocumentChange.Type.ADDED) {
                     String senderId = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
                     String receiverId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
                     chatMessage chatMessage = new chatMessage();
+
                     chatMessage.senderId = senderId;
                     chatMessage.receiverId = receiverId;
 
@@ -115,17 +128,22 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
                         chatMessage.conversionName = documentChange.getDocument().getString(Constants.KEY_RECEIVER_NAME);
                         chatMessage.conversionId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
                         chatMessage.conversationEmail = documentChange.getDocument().getString(Constants.KEY_RECEIVER_EMAIL);
+
                     } else {
                         chatMessage.conversionImage = documentChange.getDocument().getString(Constants.KEY_SENDER_IMAGE);
                         chatMessage.conversionName = documentChange.getDocument().getString(Constants.KEY_SENDER_NAME);
                         chatMessage.conversionId = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
                         chatMessage.conversationEmail = documentChange.getDocument().getString(Constants.KEY_SENDER_EMAIL);
+
                     }
 
                     chatMessage.message = documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE);
                     chatMessage.dateObject = documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
+
                     chatMessages.add(chatMessage);
+
                 } else if (documentChange.getType() == DocumentChange.Type.MODIFIED) {
+
                     for (int i = 0; i < chatMessages.size(); i++) {
                         String senderId = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
                         String receiverId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
@@ -146,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
         }
     };
 
+
     private void getToken() {
         FirebaseMessaging.getInstance().getToken().addOnSuccessListener(this::updateToken);
     }
@@ -160,47 +179,65 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
     }
 
     private void signOut() {
-        showToast("Signing out");
+        showToast("signing out");
         FirebaseFirestore database = FirebaseFirestore.getInstance();
         DocumentReference documentReference =
-                database.collection(Constants.KEY_COLLECTION_USERS).document(preferenceManager.getString(Constants.KEY_USER_ID));
+                database.collection(Constants.KEY_COLLECTION_USERS).document(
+                        preferenceManager.getString(Constants.KEY_USER_ID)
+                );
         HashMap<String, Object> updates = new HashMap<>();
         updates.put(Constants.KEY_FCM_TOKEN, FieldValue.delete());
         documentReference.update(updates)
                 .addOnSuccessListener(unused -> {
                     preferenceManager.clear();
                     startActivity(new Intent(getApplicationContext(), log_In.class));
-                    finish();
+                    //finish();
                 })
-                .addOnFailureListener(e -> showToast("Unable to sign out"));
+                .addOnFailureListener(e -> {
+                    showToast("Unable to sign out");
+                });
     }
 
-    private void setListeners() {
-        signOutButton.setOnClickListener(view -> signOut());
-
-        addButton.setOnClickListener(view -> {
-            Intent intent = new Intent(getApplicationContext(), addChat.class);
-            startActivity(intent);
+    private void setLissners() {
+        signOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signOut();
+            }
         });
 
-        textName.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, settings.class);
-            intent.putExtra(Constants.KEY_NAME, preferenceManager.getString(Constants.KEY_NAME));
-            intent.putExtra(Constants.KEY_EMAIL, preferenceManager.getString(Constants.KEY_EMAIL));
-            intent.putExtra(Constants.KEY_IMAGE, preferenceManager.getString(Constants.KEY_IMAGE));
-            startActivity(intent);
-            finish();
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), addChat.class);
+                startActivity(intent);
+            }
         });
+        textName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, settings.class);
+                intent.putExtra(Constants.KEY_NAME, preferenceManager.getString(Constants.KEY_NAME));
+                intent.putExtra(Constants.KEY_EMAIL, preferenceManager.getString(Constants.KEY_EMAIL));
+                intent.putExtra(Constants.KEY_IMAGE, preferenceManager.getString(Constants.KEY_IMAGE));
+                startActivity(intent);
+                finish();
+            }
+        });
+
     }
 
     @Override
     public void onConversionListener(User user) {
-        database.collection("users").document(user.id).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    otherToken = document.getString(Constants.KEY_FCM_TOKEN);
-                    user.token = otherToken;
+        database.collection("users").document(user.id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        otherToken = document.getString(Constants.KEY_FCM_TOKEN);
+                        user.token = otherToken;
+                    }
                 }
             }
         });
@@ -208,5 +245,6 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
         chatIntent.putExtra(Constants.KEY_USER, user);
         chatIntent.putExtra("token", token);
         startActivity(chatIntent);
+        //finish();
     }
 }

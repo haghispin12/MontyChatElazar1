@@ -2,11 +2,15 @@ package com.example.montychat;
 
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -15,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -30,7 +35,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,8 +68,12 @@ public class chat_with_user extends AppCompatActivity {
     private String capturedImage;
     View view_back;
     View ViewPass;
-    Button btnGallery;
-    Button btnCamera;
+    String imageUrl;
+    private static final int CAMERA_PERMISSION_CODE = 100;
+    private static final int CAMERA_REQUEST_CODE = 1888;
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
+    private Uri filePath;
 
 
     private static final String FCM_URL = "https://fcm.googleapis.com/v1/projects/monty-chat-9bf8e/messages:send";
@@ -84,8 +97,6 @@ public class chat_with_user extends AppCompatActivity {
         infoButton = findViewById(R.id.image_info);
         view_back = findViewById(R.id.view_back);
         ViewPass = findViewById(R.id.ViewPass);
-        btnGallery = findViewById(R.id.btnGallery);
-        btnCamera = findViewById(R.id.btnCamera);
 
         getWindow().setStatusBarColor(ContextCompat.getColor(chat_with_user.this, R.color.dark));
 
@@ -104,6 +115,8 @@ public class chat_with_user extends AppCompatActivity {
         chatAdapter = new chatAdapter(this, chatMessages);
         adapter.setAdapter(chatAdapter);
         database = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
     }
 
     private final EventListener<QuerySnapshot> eventListener = (value, error) -> {
@@ -165,6 +178,20 @@ public class chat_with_user extends AppCompatActivity {
             intent.putExtra(Constants.KEY_USER, receiverUser);
             startActivity(intent);
         });
+        CameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // בדיקת גישה להרשאת המצלמה
+                if (ContextCompat.checkSelfPermission(chat_with_user.this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    // אם יש גישה למצלמה, פתח אותה
+                    openCamera();
+                } else {
+                    // אם אין גישה, בקש הרשאה
+                    ActivityCompat.requestPermissions(chat_with_user.this, new String[]{android.Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+                }
+            }
+        });
+
     }
 
     private String getReadableDateTime(Date date) {
@@ -203,18 +230,76 @@ public class chat_with_user extends AppCompatActivity {
         }
     };
 
-    private boolean isAtLeastOneDayAfter(Date firstDate, Date secondDate) {
-        // חישוב ההפרש במילישניות
-        long differenceInMillis = secondDate.getTime() - firstDate.getTime();
-
-        // חישוב ההפרש בימים
-        long differenceInDays = differenceInMillis / (1000 * 60 * 60 * 24);
-
-        // החזרת true אם ההפרש הוא יום אחד או יותר, אחרת false
-        return differenceInDays >= 1;
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openCamera();
+            } else {
+                Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
-    public void showToast(String s, Context context) {
-        runOnUiThread(() -> Toast.makeText(context, s, Toast.LENGTH_SHORT).show());
+    // Open camera method
+    private void openCamera() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
     }
+
+
+    // Handle camera capture result
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            uploadImageToFirebase(photo);
+        }
+    }
+
+
+    // Convert Bitmap to Uri
+    private Uri getImageUri(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "Title", null);
+        return Uri.parse(path);
+    }
+
+    // Upload image to Firebase Storage
+    private void uploadImageToFirebase(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        String fileName = "image_" + System.currentTimeMillis() + ".jpg";
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("images/" + fileName);
+
+        UploadTask uploadTask = storageRef.putBytes(data);
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+            // התמונה הועלתה בהצלחה
+            Toast.makeText(chat_with_user.this, "Image uploaded successfully", Toast.LENGTH_SHORT).show();
+
+            // לאחר ההעלאה, קבל את קישור התמונה
+            storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                imageUrl = uri.toString();
+                vm.sendMessage(null,uri.toString(),receiverUser,conversionId,preferenceManager);
+
+                // כאן תוכל לעשות משהו עם ה-URL של התמונה, לדוגמה לשמור אותו במסד הנתונים של Firebase Firestore
+                // או לשלוח אותו לפונקציה שתשתמש בו למשימה נוספת
+            }).addOnFailureListener(exception -> {
+                // טיפול בשגיאה אם נכשל בקבלת קישור התמונה
+                Toast.makeText(chat_with_user.this, "Failed to get image URL", Toast.LENGTH_SHORT).show();
+            });
+
+        }).addOnFailureListener(e -> {
+            // טיפול בשגיאה אם נכשלה ההעלאה
+            Toast.makeText(chat_with_user.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+
 }

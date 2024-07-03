@@ -59,14 +59,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="60dp"
+                    android:layout_marginTop="30dp"
                     android:shape="oval">
 
 
                     <com.makeramen.roundedimageview.RoundedImageView
                         android:id="@+id/imageProfile_sign_up"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="155dp"
+                        android:layout_height="155dp"
                         android:background="@drawable/image_back"
                         android:scaleType="centerCrop"
                         app:layout_constraintStart_toStartOf="parent"
@@ -91,7 +91,7 @@
                     android:layout_width="325dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginTop="36dp"
                     android:gravity="center"
                     android:orientation="vertical">
 

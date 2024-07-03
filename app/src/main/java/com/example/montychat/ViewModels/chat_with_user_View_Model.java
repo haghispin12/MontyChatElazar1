@@ -27,7 +27,7 @@ public class chat_with_user_View_Model extends ViewModel {
 
     public void sendMessage(@NonNull String messageText, String capturedImage, User receiverUser, String conversionId, PreferenceManager preferenceManager) {
         HashMap<String, Object> message = new HashMap<>();
-        if (!messageText.isEmpty()) {
+        if (messageText != null || capturedImage != null) {
             message.put(Constants.KEY_SENDER_ID, preferenceManager.getString(Constants.KEY_USER_ID));
             message.put(Constants.KEY_RECEIVER_ID, receiverUser.id);
             message.put(Constants.KEY_MESSAGE, messageText);
