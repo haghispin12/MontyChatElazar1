@@ -176,7 +176,7 @@
         android:layout_marginStart="9dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/chat_input"
-        android:backgroundTint="@color/primary"
+        android:backgroundTint="@color/back"
         android:contentDescription="@string/app_name"
         android:src="@drawable/image_gallery"
         android:padding="3dp"

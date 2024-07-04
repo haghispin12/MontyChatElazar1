@@ -3,6 +3,7 @@ package com.example.montychat;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -179,8 +180,10 @@ public class chat_with_user extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 CameraButton.setOnClickListener(new View.OnClickListener() {
+                    @SuppressLint("ResourceAsColor")
                     @Override
                     public void onClick(View v) {
+                        CameraButton.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getApplicationContext(), R.color.error)));
                         chooseImageFromGallery();
                     }
                 });
@@ -258,7 +261,7 @@ public class chat_with_user extends AppCompatActivity {
                 storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                     String imageUrl = uri.toString();
                     vm.sendMessage(null, imageUrl, receiverUser, conversionId, preferenceManager);
-
+                    CameraButton.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getApplicationContext(), R.color.back)));
                     // Here you can do something with the image URL, such as saving it to Firebase Firestore database
                     // or sending it to a function that uses it for another task
                 }).addOnFailureListener(exception -> {
