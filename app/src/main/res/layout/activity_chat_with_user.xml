@@ -169,7 +169,7 @@
 
         />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/CameraButton"
         android:layout_width="50dp"
         android:layout_height="45dp"
@@ -178,7 +178,8 @@
         android:background="@drawable/chat_input"
         android:backgroundTint="@color/primary"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/round_photo_camera_24"
+        android:src="@drawable/image_gallery"
+        android:padding="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_goneMarginEnd="15dp"

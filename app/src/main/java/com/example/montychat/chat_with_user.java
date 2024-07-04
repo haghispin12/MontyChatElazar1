@@ -3,23 +3,19 @@ package com.example.montychat;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -39,7 +35,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,7 +56,7 @@ public class chat_with_user extends AppCompatActivity {
     androidx.appcompat.widget.AppCompatImageView infoButton;
     androidx.appcompat.widget.AppCompatImageView imageProfile;
     androidx.recyclerview.widget.RecyclerView adapter;
-    ImageButton CameraButton;
+    ImageView CameraButton;
     EditText inputMessage;
     FrameLayout layoutSend;
     ProgressBar progsesBar_Chat;
@@ -101,6 +96,8 @@ public class chat_with_user extends AppCompatActivity {
         getWindow().setStatusBarColor(ContextCompat.getColor(chat_with_user.this, R.color.dark));
 
         vm = new ViewModelProvider(this).get(chat_with_user_View_Model.class);
+
+
 
         setListeners();
         loadReceiverDetails();
@@ -181,14 +178,12 @@ public class chat_with_user extends AppCompatActivity {
         CameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // בדיקת גישה להרשאת המצלמה
-                if (ContextCompat.checkSelfPermission(chat_with_user.this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                    // אם יש גישה למצלמה, פתח אותה
-                    openCamera();
-                } else {
-                    // אם אין גישה, בקש הרשאה
-                    ActivityCompat.requestPermissions(chat_with_user.this, new String[]{android.Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
-                }
+                CameraButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        chooseImageFromGallery();
+                    }
+                });
             }
         });
 
@@ -230,76 +225,55 @@ public class chat_with_user extends AppCompatActivity {
         }
     };
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == CAMERA_PERMISSION_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openCamera();
-            } else {
-                Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
+    private static final int PICK_IMAGE_REQUEST = 1; // קוד קבוע לבחירת תמונה מהגלריה
 
-    // Open camera method
-    private void openCamera() {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
-    }
-
-
-    // Handle camera capture result
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            uploadImageToFirebase(photo);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri selectedImageUri = data.getData();
+            uploadImageToFirebase(selectedImageUri);
         }
     }
 
-
-//    // Convert Bitmap to Uri
-//    private Uri getImageUri(Bitmap bitmap) {
-//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-//        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "Title", null);
-//        return Uri.parse(path);
-//    }
+    // בקשת בחירת תמונה מהגלריה
+    private void chooseImageFromGallery() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent, PICK_IMAGE_REQUEST);
+    }
 
     // Upload image to Firebase Storage
-    private void uploadImageToFirebase(Bitmap bitmap) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] data = baos.toByteArray();
+    private void uploadImageToFirebase(Uri fileUri) {
+        if (fileUri != null) {
+            StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("images/" + System.currentTimeMillis() + ".jpg");
 
-        String fileName = "image_" + System.currentTimeMillis() + ".jpg";
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("images/" + fileName);
+            // Upload file to Firebase Storage
+            UploadTask uploadTask = storageRef.putFile(fileUri);
+            uploadTask.addOnSuccessListener(taskSnapshot -> {
+                // Image uploaded successfully
+                Toast.makeText(chat_with_user.this, "Image uploaded successfully", Toast.LENGTH_SHORT).show();
 
-        UploadTask uploadTask = storageRef.putBytes(data);
-        uploadTask.addOnSuccessListener(taskSnapshot -> {
-            // התמונה הועלתה בהצלחה
-            Toast.makeText(chat_with_user.this, "Image uploaded successfully", Toast.LENGTH_SHORT).show();
+                // After upload, get the image URL
+                storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                    String imageUrl = uri.toString();
+                    vm.sendMessage(null, imageUrl, receiverUser, conversionId, preferenceManager);
 
-            // לאחר ההעלאה, קבל את קישור התמונה
-            storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                imageUrl = uri.toString();
-                vm.sendMessage(null,uri.toString(),receiverUser,conversionId,preferenceManager);
+                    // Here you can do something with the image URL, such as saving it to Firebase Firestore database
+                    // or sending it to a function that uses it for another task
+                }).addOnFailureListener(exception -> {
+                    // Handle failure to get image URL
+                    Toast.makeText(chat_with_user.this, "Failed to get image URL", Toast.LENGTH_SHORT).show();
+                });
 
-                // כאן תוכל לעשות משהו עם ה-URL של התמונה, לדוגמה לשמור אותו במסד הנתונים של Firebase Firestore
-                // או לשלוח אותו לפונקציה שתשתמש בו למשימה נוספת
-            }).addOnFailureListener(exception -> {
-                // טיפול בשגיאה אם נכשל בקבלת קישור התמונה
-                Toast.makeText(chat_with_user.this, "Failed to get image URL", Toast.LENGTH_SHORT).show();
+            }).addOnFailureListener(e -> {
+                // Handle upload failure
+                Toast.makeText(chat_with_user.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
             });
-
-        }).addOnFailureListener(e -> {
-            // טיפול בשגיאה אם נכשלה ההעלאה
-            Toast.makeText(chat_with_user.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
-        });
+        }
     }
+
+// בוצע קריאה לפונקציה זו על מנת לבחור תמונה מהגלריה
 
 
 }

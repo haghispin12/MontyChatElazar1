@@ -7,7 +7,7 @@
     app:layout_constraintWidth_max="250dp"
     android:gravity="end"
     android:orientation="horizontal"
-    android:padding="2dp">
+    android:padding="1dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -30,23 +30,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
-        <TextView
-            android:id="@+id/textMessage_R_I"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
-            android:background="@drawable/back_received_message"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:textColor="@color/white"
-            android:textSize="15sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintWidth_max="wrap"
-            app:layout_constraintTop_toTopOf="parent"
-            android:visibility="gone"
-            app:layout_constraintWidth_percent="0.75"/>
 
         <TextView
             android:id="@+id/textDateTime_R_I"

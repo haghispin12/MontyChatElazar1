@@ -1,6 +1,7 @@
 package com.example.montychat.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.montychat.R;
 import com.example.montychat.models.chatMessage;
+import com.example.montychat.show_photo;
 import com.example.montychat.utilities.Constants;
 import com.example.montychat.utilities.PreferenceManager;
 import com.squareup.picasso.Picasso;
@@ -203,7 +205,6 @@ public class chatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             // Initialize views
             sentImage = itemView.findViewById(R.id.Sent_Message_Image);
-            textMessage = itemView.findViewById(R.id.textMessage_S_I);
             textDateTime = itemView.findViewById(R.id.textDateTime_S_I);
         }
 
@@ -214,10 +215,16 @@ public class chatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if(message.ImageMessageChat != null){
                 Picasso.get().load(message.ImageMessageChat).into(sentImage);
             }
-            if(textMessage != null){
-                textMessage.setText(message.message);
-                textMessage.setVisibility(View.VISIBLE); // Show the message TextView
-            }
+
+            sentImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, show_photo.class);
+                    intent.putExtra("url",message.ImageMessageChat);
+                    context.startActivity(intent);
+                }
+            });
+
             textDateTime.setText(message.dateTime);
             textDateTime.setVisibility(View.VISIBLE); // Show the date/time TextView
         }
@@ -233,7 +240,6 @@ public class chatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             // Initialize views
             receivedImage = itemView.findViewById(R.id.Receiver_Message_Image);
-            textMessage = itemView.findViewById(R.id.textMessage_R_I);
             textDateTime = itemView.findViewById(R.id.textDateTime_R_I);
         }
 
@@ -243,12 +249,17 @@ public class chatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             // I'm assuming message.getImageUrl() returns the URL of the image
             if(message.ImageMessageChat != null){
                 Picasso.get().load(message.ImageMessageChat).into(receivedImage);
-            }
 
-            if(textMessage != null){
-                textMessage.setText(message.message);
-                textMessage.setVisibility(View.VISIBLE); // Show the message TextView
             }
+            receivedImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, show_photo.class);
+                    intent.putExtra("url",message.ImageMessageChat);
+                    context.startActivity(intent);
+                }
+            });
+
             textDateTime.setText(message.dateTime);
             textDateTime.setVisibility(View.VISIBLE); // Show the date/time TextView
         }

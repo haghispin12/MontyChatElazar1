@@ -62,10 +62,9 @@ dependencies {
     implementation ("androidx.multidex:multidex:2.0.1")
 
     implementation ("com.squareup.picasso:picasso:2.71828")
+    implementation("io.getstream:photoview:1.0.2")
 
-    implementation("androidx.core:core:1.13.1")
 
-    implementation("com.squareup.okhttp3:okhttp:4.10.0")
 
 
 

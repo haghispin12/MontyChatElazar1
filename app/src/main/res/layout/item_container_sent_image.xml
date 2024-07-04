@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="start"
     android:orientation="horizontal"
-    android:padding="2dp">
+    android:padding="1dp">
 
     <LinearLayout
         android:id="@+id/layout_sent_message"
@@ -31,21 +31,7 @@
             app:layout_constraintTop_toTopOf="parent"
             />
 
-        <TextView
-            android:id="@+id/textMessage_S_I"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingStart="12dp"
-            android:paddingTop="3dp"
-            android:paddingEnd="8dp"
-            android:textColor="@color/white"
-            android:textSize="15sp"
-            android:visibility="gone"
-            app:layout_constraintWidth_max="270dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.8"
-            tools:ignore="Suspicious0dp" />
+
 
         <TextView
             android:id="@+id/textDateTime_S_I"
@@ -55,7 +41,6 @@
             android:layout_marginEnd="5dp"
             android:textColor="@color/white"
             android:textSize="8sp"
-            android:visibility="gone"
             tools:ignore="MissingConstraints,NotSibling" />
 
     </LinearLayout>
