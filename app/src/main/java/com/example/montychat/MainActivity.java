@@ -143,11 +143,12 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
 
                     // Add new message to the beginning of the list
                     chatMessages.add(0, chatMessage);
-                } else if (documentChange.getType() == DocumentChange.Type.MODIFIED) {
+                }else if (documentChange.getType() == DocumentChange.Type.MODIFIED) {
                     for (int i = 0; i < chatMessages.size(); i++) {
                         String senderId = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
                         String receiverId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
-                        if (chatMessages.get(i).senderId.equals(senderId) && chatMessages.get(i).receiverId.equals(receiverId) && senderId.equals(preferenceManager.getString(Constants.KEY_USER_ID))) {
+                        if ((chatMessages.get(i).senderId.equals(senderId) && chatMessages.get(i).receiverId.equals(receiverId)) ||
+                                (chatMessages.get(i).senderId.equals(receiverId) && chatMessages.get(i).receiverId.equals(senderId))) {
                             if(documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE) != null){
                                 chatMessages.get(i).message = documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE);
                             } else chatMessages.get(i).message = "photo";
@@ -156,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
                         }
                     }
                 }
+
             }
 
             // Sort the list based on dateObject (assuming it's a Date object)
