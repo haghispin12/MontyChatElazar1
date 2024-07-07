@@ -8,13 +8,13 @@
     <color name="dark_clear">#7187FF</color>
     <color name="dark">#DD040404</color>
 
-    <color name="secondary_text">#605A5A</color>
+    <color name="secondary_text">#A5D7FF</color>
     <color name="input_back">#9CFFFFFF</color>
-    <color name="input_back2">#6A8C6B</color>
-    <color name="icon_back">#B93C3C3C</color>
+    <color name="input_back2">#122D43</color>
+    <color name="icon_back">#6F99AB</color>
     <color name="error">#BEFF6980</color>
-    <color name="color">#5E5858</color>
-    <color name="back">#A68BFF8F</color>
+    <color name="color">#979797</color>
+    <color name="back">#A66EFF73</color>
     <color name="color2">#F0D5D5D5</color>
     <color name="color3">#8AABC5</color>
 

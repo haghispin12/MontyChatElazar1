@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="@drawable/__4_"
-
+    android:background="@color/icon_back"
     tools:context=".chat_with_user">
 
 
@@ -78,6 +77,18 @@
         app:layout_constraintStart_toEndOf="@+id/image_back"
         app:layout_constraintTop_toTopOf="@+id/image_back"/>
 
+    <TextView
+        android:id="@+id/availability"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/back"
+        app:layout_constraintTop_toBottomOf="@+id/ViewPass"
+        android:text="Online"
+        android:textSize="15sp"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:visibility="gone"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecyclerView"
         android:layout_width="match_parent"
@@ -91,8 +102,7 @@
         app:stackFromEnd="true"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="@id/view_back"
-        app:layout_constraintTop_toBottomOf="@+id/image_back"
-        app:layout_constraintTop_toTopOf="@+id/ViewPass"
+        app:layout_constraintTop_toBottomOf="@+id/availability"
         />
 
     <ProgressBar

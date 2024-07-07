@@ -16,7 +16,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -42,8 +41,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
-public class chat_with_user extends AppCompatActivity {
+public class chat_with_user extends BaseActivity {
 
     private User receiverUser;
     private List<chatMessage> chatMessages;
@@ -52,10 +52,9 @@ public class chat_with_user extends AppCompatActivity {
     private FirebaseFirestore database;
     private String conversionId = null;
 
-    TextView textName;
+    TextView textName,TextAvailability;
     androidx.appcompat.widget.AppCompatImageView imageBack;
     androidx.appcompat.widget.AppCompatImageView infoButton;
-    androidx.appcompat.widget.AppCompatImageView imageProfile;
     androidx.recyclerview.widget.RecyclerView adapter;
     ImageView CameraButton;
     EditText inputMessage;
@@ -64,16 +63,15 @@ public class chat_with_user extends AppCompatActivity {
     private String capturedImage;
     View view_back;
     View ViewPass;
-    String imageUrl;
-    private static final int CAMERA_PERMISSION_CODE = 100;
-    private static final int CAMERA_REQUEST_CODE = 1888;
+
+
     private FirebaseStorage storage;
     private StorageReference storageReference;
-    private Uri filePath;
+
+    private Boolean isReceiverAvailable = false;
 
 
-    private static final String FCM_URL = "https://fcm.googleapis.com/v1/projects/monty-chat-9bf8e/messages:send";
-    private static final String SERVER_KEY = "162a74b472d90c645f7670a729bb6c7e50812e7d";
+
 
     chat_with_user_View_Model vm;
 
@@ -93,8 +91,9 @@ public class chat_with_user extends AppCompatActivity {
         infoButton = findViewById(R.id.image_info);
         view_back = findViewById(R.id.view_back);
         ViewPass = findViewById(R.id.ViewPass);
+        TextAvailability = findViewById(R.id.availability);
 
-        getWindow().setStatusBarColor(ContextCompat.getColor(chat_with_user.this, R.color.dark));
+        getWindow().setStatusBarColor(ContextCompat.getColor(chat_with_user.this, R.color.input_back2));
 
         vm = new ViewModelProvider(this).get(chat_with_user_View_Model.class);
 
@@ -277,6 +276,30 @@ public class chat_with_user extends AppCompatActivity {
     }
 
 // בוצע קריאה לפונקציה זו על מנת לבחור תמונה מהגלריה
+public void listenerIsReceiverAvailable (){
+        database.collection(Constants.KEY_COLLECTION_USERS).document(
+                receiverUser.id
+        ).addSnapshotListener(chat_with_user.this,(value, error) ->{
+            if(error != null){
+                return;
+            }
+            if(value != null){
+                if(value.getLong(Constants.KEY_AVAILABILITY) != null) {
+                    int aavailability = Objects.requireNonNull(
+                            value.getLong(Constants.KEY_AVAILABILITY)
+                    ) .intValue();
+                    isReceiverAvailable = aavailability == 1;
+                }
+            }
+            if(isReceiverAvailable){
+                TextAvailability.setVisibility(View.VISIBLE);
+            } else TextAvailability.setVisibility(View.GONE);
+        });
+    }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        listenerIsReceiverAvailable();
+    }
 }

@@ -25,7 +25,7 @@ public class Constants {
     public static final  String KEY_IMAGE_MESSAGE = "imageMessage";
     public static final  String KEY_RECEIVER_EMAIL = "receiverEmail";
     public static final  String KEY_SENDER_EMAIL = "senderEmail";
-    public static final String KEY_LAST_ID = "lastId";
+    public static final String KEY_AVAILABILITY = "availability";
 
 
 

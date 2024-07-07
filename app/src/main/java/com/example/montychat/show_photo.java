@@ -6,14 +6,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.squareup.picasso.Picasso;
 
 import io.getstream.photoview.PhotoView;
 
-public class show_photo extends AppCompatActivity {
+public class show_photo extends BaseActivity {
 
     ImageButton back;
 

@@ -16,7 +16,7 @@ public class splash extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        getWindow().setStatusBarColor(ContextCompat.getColor(splash.this,R.color.input_back2));
+        getWindow().setStatusBarColor(ContextCompat.getColor(splash.this,R.color.icon_back));
 
 
         // התחלת פעילות ראשית לאחר השהיה של SPLASH_DURATION מילישניות

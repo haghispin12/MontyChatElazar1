@@ -10,14 +10,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.montychat.models.User;
 import com.example.montychat.utilities.Constants;
 import com.squareup.picasso.Picasso;
 
-public class showUser extends AppCompatActivity {
+public class showUser extends BaseActivity {
 
     User receiverUser;
     TextView email,name;

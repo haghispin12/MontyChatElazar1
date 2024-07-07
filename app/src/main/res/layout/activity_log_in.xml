@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".log_In"
     android:animateLayoutChanges="true"
-    android:background="@drawable/__4_">
+    android:background="@color/color3">
 
 <LinearLayout
     android:layout_width="match_parent"
@@ -64,7 +64,7 @@
                 android:inputType="textEmailAddress"
                 android:paddingStart="16sp"
                 android:paddingEnd="16sp"
-                android:textColor="@color/primary_text"
+                android:textColor="@color/white"
                 android:textColorHint="@color/white"
                 android:textSize="13sp" />
 
@@ -80,7 +80,7 @@
                 android:inputType="textEmailAddress"
                 android:paddingStart="16sp"
                 android:paddingEnd="16sp"
-                android:textColor="@color/primary_text"
+                android:textColor="@color/white"
                 android:textColorHint="@color/white"
                 android:textSize="13sp" />
 
@@ -96,7 +96,7 @@
                     android:id="@+id/Sign_In_Button"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
-                    android:backgroundTint="@color/primary"
+                    android:backgroundTint="@color/input_back2"
                     android:text="SIGN IN "
                     android:textColor="@color/white"
                     android:textSize="20sp"

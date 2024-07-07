@@ -10,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.montychat.adapters.RecentConversationAdapter;
@@ -36,7 +35,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements ConversionListener {
+public class MainActivity extends BaseActivity implements ConversionListener {
 
     TextView textName;
     com.makeramen.roundedimageview.RoundedImageView imageProfile;
@@ -66,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
 
         preferenceManager = new PreferenceManager(getApplicationContext());
 
-        getWindow().setStatusBarColor(ContextCompat.getColor(MainActivity.this, R.color.dark));
+        getWindow().setStatusBarColor(ContextCompat.getColor(MainActivity.this, R.color.input_back2));
 
 
         init();
